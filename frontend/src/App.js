@@ -348,28 +348,29 @@ function CountUp({ value }) {
   const [display, setDisplay] = useState(value);
   useEffect(() => {
     const node = ref.current;
-    const match = value.match(/^(\d+)(.*)$/);
+    const match = value.match(/^(\d[\d,]*)(.*)$/);
     if (!node || !match) return undefined;
-    const target = parseInt(match[1], 10);
+    const target = parseInt(match[1].replace(/,/g, ""), 10);
     const suffix = match[2];
-    const pad = match[1].length;
+    const grouped = match[1].includes(",");
+    const pad = grouped ? 0 : match[1].length;
+    const fmt = (n) => (grouped ? n.toLocaleString("en-IN") : String(n).padStart(pad, "0")) + suffix;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const render = (n) => setDisplay(String(n).padStart(pad, "0") + suffix);
     let raf = null;
     const animate = () => {
-      if (reduced) { render(target); return; }
+      if (reduced) { setDisplay(fmt(target)); return; }
       const start = performance.now();
       const duration = 1400;
       const tick = (now) => {
         const t = Math.min((now - start) / duration, 1);
-        render(Math.round((1 - Math.pow(1 - t, 3)) * target));
+        setDisplay(fmt(Math.round((1 - Math.pow(1 - t, 3)) * target)));
         if (t < 1) raf = requestAnimationFrame(tick);
       };
       raf = requestAnimationFrame(tick);
     };
     const observer = new IntersectionObserver(([entry]) => {
       if (raf) cancelAnimationFrame(raf);
-      if (entry.isIntersecting) { render(0); animate(); } else render(0);
+      if (entry.isIntersecting) { setDisplay(fmt(0)); animate(); } else setDisplay(fmt(0));
     }, { threshold: 0.4 });
     observer.observe(node);
     return () => { observer.disconnect(); if (raf) cancelAnimationFrame(raf); };
@@ -750,7 +751,7 @@ function ProjectPage() {
     <section className="case-study-hero"><div className="detail-kicker"><span>{project.segment.toUpperCase()} · {project.year}</span><Link to="/projects" data-testid="case-study-back-link">BACK TO PROJECTS</Link></div><div className="case-study-hero-copy"><span className="section-index">{project.category.toUpperCase()} · {project.location}</span><h1>{project.title}<span className="hero-dot">.</span></h1><p>{project.description}</p></div><div className="case-study-hero-image"><img src={img(project.image)} alt="" data-testid="case-study-hero-image" /></div></section>
     <section className="case-study-overview"><div className="case-study-overview-label"><span className="section-index">01 — THE BRIEF</span><Link to={`/businesses/${segment?.slug || "marble-and-stone"}`} data-testid="case-study-agency-link">VIEW {project.segment.toUpperCase()} <ArrowUpRight size={15} /></Link></div><div className="case-study-story"><div><span className="story-label">THE CHALLENGE</span><h2>{project.challenge}</h2></div><div><span className="story-label">THE APPROACH</span><p>{project.approach}</p></div></div></section>
     <section className="case-study-gallery"><div className="case-study-gallery-heading"><span className="section-index">02 — IN PLACE</span><h2>Detail in<br /><em>the material.</em></h2></div><div className="case-study-images">{project.gallery.map((image, index) => <figure className={`case-study-image case-study-image--${index + 1}`} key={image}><img src={img(image, 1200)} alt={`${project.title} view ${index + 1}`} data-testid={`case-study-gallery-image-${index + 1}`} /><figcaption>0{index + 1} / {project.category.toUpperCase()}</figcaption></figure>)}</div></section>
-    <section className="case-study-results"><div><span className="section-index">03 — OUTCOMES</span><h2>Proof in<br /><em>the numbers.</em></h2></div><div className="result-grid">{project.outcomes.map(([value, label]) => <div className="result-stat" key={label}><strong>{value}</strong><span>{label}</span></div>)}</div></section>
+    <section className="case-study-results"><div><span className="section-index">03 — OUTCOMES</span><h2>Proof in<br /><em>the numbers.</em></h2></div><div className="result-grid">{project.outcomes.map(([value, label]) => <div className="result-stat" key={label}><CountUp value={value} /><span>{label}</span></div>)}</div></section>
     <section className="case-study-credits"><div><span className="section-index">04 — CREDITS</span><h2>Built by<br /><em>one team.</em></h2></div><div className="credits-list">{project.credits.map((credit, index) => <div key={credit}><span>0{index + 1}</span><p>{credit}</p></div>)}</div></section>
     <section className="case-study-next"><span className="section-index">UP NEXT</span><Link to={`/projects/${nextProject.slug}`} data-testid="next-case-study-link"><span>{nextProject.segment} · {nextProject.category}</span><h2>{nextProject.title}<ArrowUpRight size={27} /></h2></Link></section>
   </main>;

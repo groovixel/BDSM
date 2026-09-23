@@ -1,0 +1,44 @@
+{
+  "iteration": 9,
+  "summary": "All 4 UI-facing criteria for the navigation drawer footer fix verified via browser checks. No backend/API surface for these criteria, so no backend test files were needed.",
+  "passed": 4,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Menu footer text is visible in the embedded preview layout (990x780)",
+      "name": "menu-footer-visible-embedded-990x780",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 990x780, opened drawer via open-menu-button; navigation-drawer-footer bounding box fully within viewport (y>0, y+height<=780) after transition settled; innerText contained 'HELLO@BDSM.CO' and 'BDS MARVEL'. Screenshot: footer-990x780.png"
+    },
+    {
+      "criterion": "Menu footer appears after navigation without overlap (desktop + mobile)",
+      "name": "menu-footer-no-overlap-nav-desktop-mobile",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 1280x720 and 390x844, navigation-drawer-footer.boundingBox().y >= navigation-menu bottom edge (navBottom); all 7 nav-*-link testids visible. Screenshots: desktop-1280x720.png, mobile-390x844.png"
+    },
+    {
+      "criterion": "Menu footer remains visible across representative screen sizes",
+      "name": "menu-footer-visible-across-sizes",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Footer text fully within viewport bounds at 1280x720, 990x780, 390x844, 844x390. CSS display verified: flex (one-line) at widths >800px (1280, 990, 844x390 landscape - width-based breakpoint), block (stacked) at 390x844 (width<=800). Screenshots for all 4 sizes."
+    },
+    {
+      "criterion": "Drawer remains usable after responsive compression",
+      "name": "drawer-usable-after-responsive-compression",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 375x700: all 7 nav items visible+enabled, no horizontal overflow (scrollWidth<=clientWidth+1), close-menu-button removes menu-drawer--open class, zero console errors and zero >=400 network responses captured during flow. Screenshots: drawer-open-375x700.png, drawer-closed-375x700.png"
+    }
+  ],
+  "notes": [
+    "Initial run of menu-footer-visible-embedded-990x780 failed due to my own test timing (measured bounding box before the .55s CSS slide-in transition completed, y=-81). Added expect.poll to wait for transition settle; re-ran and it passed cleanly - classified as flaky/test-timing, not an app bug.",
+    "844x390 was initially asserted to use stacked (mobile) layout but the app's CSS breakpoint is width-based (max-width:800px), so 844px width correctly renders the desktop one-line layout. Adjusted expectation to match actual (correct) CSS behavior - not a bug.",
+    "Matrix has exactly 4 criteria, all UI-facing with no distinct API surface; no backend test files were applicable."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "summary": "Verified the scroll-restoration bug fix in PageShell (useEffect calling window.scrollTo on location.pathname change). Executed all 6 requested scroll-position scenarios via Playwright on the public preview URL. All navigations from a scrolled-down state land the new route at window.scrollY = 0.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_results": [
+    {"case": "Home(scrolled bottom, Y=3100) -> /contact via header-contact-link", "scrollY_after": 0, "pass": true},
+    {"case": "Home(Y=3232) -> /work via header-work-link", "scrollY_after": 0, "pass": true},
+    {"case": "/work(Y=1626) -> /work/the-unskippable-story via work-card-1", "scrollY_after": 0, "pass": true},
+    {"case": "Home(Y=2105 middle) -> /agency/foxymoron via agency-1-view-link", "scrollY_after": 0, "pass": true},
+    {"case": "/contact(Y=794) -> / via home-logo-button", "scrollY_after": 0, "pass": true},
+    {"case": "/contact(Y=810) -> / via footer-link-agencies (immediate=811 due to same-page jump, settles to 0)", "scrollY_after": 0, "pass": true}
+  ],
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "PageShell scroll-to-top useEffect at App.js:143-144 is correct and minimal.",
+    "Line 131 (footer-link-contact) redundantly calls window.scrollTo after navigate('/contact') — PageShell already handles this; the extra call is harmless but duplicative.",
+    "App.js is a large monolithic file (>300 lines with all routes/components). Consider splitting into modules for maintainability (not blocking)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Scroll-restoration verified across /, /work, /work/:slug, /agency/:slug, /contact. Fix is a single useEffect in PageShell keyed on location.pathname using window.scrollTo({top:0,behavior:'instant'}).",
+  "rca of the issue": "React Router v6 does not restore scroll on route change; new routes inherited the previous page's scrollY. Fix: PageShell subscribes to useLocation and imperatively scrolls the window to (0,0) on pathname change. Verified: all 6 tested navigations from bottom/middle scroll positions now open the new route at Y=0."
+}

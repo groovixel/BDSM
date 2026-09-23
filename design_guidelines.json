@@ -1,0 +1,113 @@
+{
+  "app_type": "marketing_site",
+  "theme": "dark",
+  "typography": {
+    "headings_font": "Outfit, sans-serif",
+    "body_font": "Inter, sans-serif",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight font-extrabold",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl font-semibold",
+      "body": "text-base leading-relaxed text-slate-300"
+    }
+  },
+  "colors": {
+    "background": "#0a0a0a",
+    "surface": "#121212",
+    "primary": "#ff3b30",
+    "accent": "#007aff",
+    "text_primary": "#ffffff",
+    "text_secondary": "#94a3b8",
+    "border": "#262626"
+  },
+  "component_path": "/app/frontend/src/components",
+  "instructions_to_main_agent": "Clone zoomedia.in exactly with responsive navigation, working menu interactions, scroll effects, smooth animations, agency network showcase (FoxyMoron, Pollen, The Rabbit Hole, The Starter Labs, Phosphene, XP&D, The Content Lab, Metafrom), Our Purpose interactive accordion/tabs, clientele logo marquee/grid, and start a project footer. Ensure all interactive elements have data-testid attributes.",
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You must not apply universal transition like transition: all.",
+    "Do not center align the app container.",
+    "Use modern button styles with hover and focus states.",
+    "Every interaction needs micro-animations.",
+    "All interactive elements must include a data-testid attribute."
+  ],
+  "image_urls": {
+    "network_agencies": [
+      {
+        "category": "agency_logo",
+        "description": "FoxyMoron agency logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/foxy-moron.svg"
+      },
+      {
+        "category": "agency_animal",
+        "description": "Fox mascot",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/Fox_Final.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "Pollen logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/Pollen%20logo%20resized_sample.svg"
+      },
+      {
+        "category": "agency_animal",
+        "description": "Bee mascot",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/bee_Final.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "The Rabbit Hole logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/TRH.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "The Starter Labs logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/TSL_Horizontal_Custom.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "Phosphene logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/Phosphene-logo.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "XP&D logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/XP_x26_D-1.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "TCM logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/TCM_logo.svg"
+      },
+      {
+        "category": "agency_logo",
+        "description": "Metafrom logo",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/metafrom.svg"
+      }
+    ],
+    "purpose_images": [
+      {
+        "category": "purpose_bg",
+        "description": "O2O2O purpose image",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/0202.jpg"
+      },
+      {
+        "category": "purpose_bg",
+        "description": "Naya Bharat purpose image",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/naya-bharat.jpg"
+      },
+      {
+        "category": "purpose_bg",
+        "description": "Web 3.0 purpose image",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/web-3.jpg"
+      },
+      {
+        "category": "purpose_bg",
+        "description": "CRO purpose image",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/CRO.png"
+      },
+      {
+        "category": "purpose_bg",
+        "description": "Social Commerce purpose image",
+        "image_url": "https://customer-assets-jt897jd0.emergentagent.net/job_d2c241fc-b1eb-42a8-8e12-8bfada710cd0/artifacts/assets/images/socail-commerce1.jpg"
+      }
+    ]
+  }
+}

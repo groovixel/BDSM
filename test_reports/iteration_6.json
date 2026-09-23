@@ -1,0 +1,17 @@
+{
+  "passed": 8,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {"criterion":"Homepage renders the imported source experience","name":"homepage-source-render","lane":"browser","status":"passed","evidence":"Homepage loaded with header, hero, network, purpose, clientele, and footer surfaces visible."},
+    {"criterion":"Primary navigation routes work","name":"primary-navigation-routes","lane":"browser","status":"passed","evidence":"Menu navigation reached /about, /projects, /catalogue, /experience, and /contact; each route rendered its expected surface."},
+    {"criterion":"Homepage interactions work","name":"homepage-interactions","lane":"browser","status":"passed","evidence":"Purpose tab state changed, network panel Explore route opened, and contact modal open/close completed."},
+    {"criterion":"Projects archive and case studies work","name":"projects-case-study-flow","lane":"browser","status":"passed","evidence":"Project search reduced results, Meridian card opened a case study, agency link opened its detail route, and back navigation returned home."},
+    {"criterion":"Catalogue interactions work","name":"catalogue-filters-search","lane":"browser","status":"passed","evidence":"Material, product, and application filters were clickable and catalogue search updated the result surface without errors."},
+    {"criterion":"Contact inquiry flow works","name":"contact-inquiry-flow","lane":"browser","status":"passed","evidence":"Valid contact modal fields submitted successfully and displayed the source success state, then closed."},
+    {"criterion":"Contact inquiry flow works","name":"test_tscheck_contact.py","lane":"backend","status":"passed","evidence":"HTTP POST /api/inquiries returned 201 with the created tscheck row id; invalid payload returned 422. pytest: 1 passed."},
+    {"criterion":"Responsive source behavior is preserved","name":"responsive-mobile-navigation","lane":"browser","status":"passed","evidence":"At 390px width homepage and /about remained usable, menu navigation worked, and document scrollWidth stayed within the viewport."}
+  ]
+}

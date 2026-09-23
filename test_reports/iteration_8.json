@@ -1,0 +1,27 @@
+{
+  "passed": 2,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Navigation drawer includes the requested contact text (`HELLO@BDSM.CO`) and brand attribution (`© BDSM · BDS MARVEL`), and the footer stays visibly in viewport across desktop 1280x720, portrait mobile 390x844, compact mobile 360x640, and short landscape 844x390",
+      "name": "drawer-footer-viewport-visibility",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At all 4 viewports (1280x720, 390x844, 360x640, 844x390) navigation-drawer-footer was visible and in-viewport, textContent contained exactly 'HELLO@BDSM.CO' and '© BDSM · BDS MARVEL', no horizontal overflow, and drawer closed cleanly after each check. Screenshots captured per viewport confirm the footer render."
+    },
+    {
+      "criterion": "Pinned footer does not break menu interaction: all seven navigation items remain visible/usable, drawer opens/closes normally, no overflow or footer overlap blocking a link",
+      "name": "drawer-footer-nav-interaction",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844, 360x640, and 844x390 all 7 nav-*-link testids were visible with no bounding-box overlap between nav-contact-link and navigation-drawer-footer, zero horizontal overflow, and the drawer opened/closed cleanly at each size. Final flow confirmed clicking nav-catalogue-link (390x844) closed the drawer and navigated to /catalogue."
+    }
+  ],
+  "notes": [
+    "First runs of both checks initially failed with 'Element is outside of the viewport' when clicking close/nav links immediately after opening the drawer. Root cause investigation (bounding-box + computed transform debugging) showed this was a transient CSS transition race in the test itself (percentage-based translateY resolving against an intermediate layout height mid-animation), not an app defect - waiting for the element to be in-viewport via expect().toBeInViewport() before clicking (and letting the .55s drawer transition settle) made both checks pass reliably on 3 consecutive reruns. Classified as test-timing flake, not a bug, per the flaky-vs-bug rule.",
+    "No API-bearing criteria in this matrix; all 4 acceptance items are pure UI/CSS and fully covered by the two browser checks above. No backend test artifacts were needed this iteration."
+  ]
+}

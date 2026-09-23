@@ -1,0 +1,35 @@
+{
+  "summary": "Verified the network-rail visibility fix via IntersectionObserver on the homepage across all sections and on /work and /contact routes. Rail is correctly hidden on hero, clients, contact, footer, and non-homepage routes; visible in the network section. Bug is FIXED.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Homepage boundary purpose/network", "issues": ["At the exact scroll position where purpose section starts (block:'start'), a ~31px sliver of the network section remains in view and the rail still shows opacity=1. As soon as the user scrolls further (+400px into purpose), rail correctly fades to opacity=0. This is a minor boundary edge from IntersectionObserver threshold 0.02 and not a real UX defect (the network section is still technically visible). If desired, main agent could tighten threshold or also gate via section index/scroll offset to fade the rail slightly earlier."]}
+    ]
+  },
+  "test_results_table": {
+    "hero_scrollY_0": "opacity 0, pointer-events none - PASS",
+    "network_start": "opacity ~0.86 (transitioning) - PASS",
+    "network_middle": "opacity 1 - PASS",
+    "purpose_start": "opacity 1 (boundary: 31px of network still in viewport) - acceptable",
+    "purpose_plus_400": "opacity 0 - PASS",
+    "clients": "opacity 0, pointer-events none - PASS",
+    "contact": "opacity 0, pointer-events none - PASS",
+    "footer": "opacity 0, pointer-events none - PASS",
+    "/work": ".network-rail not present in DOM - PASS",
+    "/contact": ".network-rail not present in DOM - PASS"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "IntersectionObserver threshold 0.02 means the rail stays visible until <2% of the (very tall, 3600px) network section is intersecting. That's up to ~72px sliver keeping rail visible. If tighter fade-out is desired at section boundary, consider using rootMargin (e.g. '-10% 0px -10% 0px') or a scroll-position-based check as backup."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100% (8/8 required checks passing; 1 non-blocking boundary observation)"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "The bug fix is verified. .network-rail correctly hidden outside the network section on the homepage and not rendered on /work and /contact routes. Only a boundary edge exists at exact top-of-purpose scroll due to threshold 0.02 — acceptable and non-blocking.",
+  "rca of the issue": "Original: .network-rail was position:fixed opacity:1 always → showed on every section. Fix: IntersectionObserver toggles 'network-experience--in-view' on <section id='network'>; CSS gates opacity/pointer-events. Verified working across all sections and routes."
+}

@@ -1,0 +1,22 @@
+{
+  "summary": "Verified mobile 'To the Top' fix and header/reveal regressions on mobile 390x844 + desktop 1920x800. Primary reported bug is fixed: footer scroll-top now reaches scrollY≈0 on both viewports even after prior wheel/touch scrolling that would previously queue a proximity snap. Network panel copy reveals still play after the rAF-throttled refactor, and mobile header correctly drops backdrop-filter while retaining a solid translucent background.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Request spec mentions 5 network panels but code (App.js line 11 `segments` array) only defines 4 (marble, flooring, construction, interiors). data-testid='network-panel-5' does not exist. If a 5th panel (e.g., Air BnB Living Studio) is intended in the network rail, add it to the segments array; otherwise the spec should be corrected to 4.",
+    "smoothScroll.js singleton stores lenis/snap on window.__smoothScroll — fine for now but consider ref-counted teardown if Router remounts."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Verified on mobile 390x844: scrollY after clicking [data-testid=footer-scroll-top] from full-scroll position = 4 (was previously stopping at Flooring panel). Verified on desktop 1920x800: scrollY = 1. snap.stop() + lock:true + snap.start() in onComplete works correctly. Panels 1..4 reveal h3+EXPLORE+GET IN TOUCH to opacity 1 on natural wheel scroll. Rail highlight tracks active panel. Mobile header: backdrop-filter='none', background='rgba(10,10,10,0.9)' as intended by @media(max-width:800px). Desktop header retains backdrop-filter. Preloader was bypassed via sessionStorage['bdsm-visited']='1'. Only 4 network panels exist (segments array length 4).",
+  "rca of the issue": "Original bug: lenis/snap in 'proximity' mode with 250ms debounce queued a snap-to-nearest-panel from the last wheel/touch flick; that queued snap fired inside the programmatic lenis.scrollTo(0) glide and hijacked it to the nearest panel (flooring/Renest). Fix in smoothScroll.js: call snap.stop() before scrollTo, pass lock:true, and snap.start() in onComplete. Confirmed working."
+}

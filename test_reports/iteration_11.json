@@ -1,0 +1,24 @@
+{
+  "summary": "Frontend-only visual verification of the Clientele marquee inside the 'Start a Project' contact section on the homepage, at 1920x800 (desktop) and 390x844 (mobile). Marquee is present, both rows exist and animate in opposite directions, and after image decode all 24 logo PNGs load with valid natural dimensions. Visual screenshots show every logo (including the previously-broken MPS crest, DWPS circular emblem, NHAI, Mangalam orange-glow, Kshetrapal, JLN crest and Army Public School Agra Cantt badge) rendered cleanly on the cream tile background with no white boxes, white rectangles, or white patches around/inside the artwork. Logos remain fully legible; hollowed-out interiors of crests show the cream tile through them (intended, per E1's note).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/ui/desktop_marquee.png",
+    "/app/test_reports/ui/mobile_marquee.png"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Logo <img> tiles use loading=\"lazy\"; on initial navigation the offscreen duplicates (row-1's second copy and row-2's items) report naturalWidth=0 until they scroll into view. This is browser-correct but caused a false-positive during automated inspection. Not a user-facing bug — screenshots confirm they paint correctly once visible. If you want them to always be immediately hydrated (e.g. for smoother marquee first-frame), consider loading=\"eager\" for at least the first row or preloading the 24 logos."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Marquee lives inside data-testid='contact-section' at the bottom of the homepage. It has data-testid='client-logo-marquee' with rows client-logo-row-1 (24 tiles) and client-logo-row-2 (24 tiles), each tile duplicated for seamless loop = 48 imgs total per marquee. Images are lazy-loaded; if verifying via naturalWidth, call img.decode() first or scroll each into viewport. Verified: MPS, DWPS, NHAI, Mangalam, Kshetrapal, JLN, Army-Cantt logos all render on cream tile with no white artefacts. Desktop 1920x800 and Mobile 390x844 both pass.",
+  "rca of the issue": "No bug present in current build. Previous white-box artefacts were removed by re-processing the 24 client PNGs with a global white-key alpha pass. Verified visually — logos with transparent interiors correctly show the cream tile (rgba(244,239,230,.92)) through the transparent regions instead of a white patch."
+}

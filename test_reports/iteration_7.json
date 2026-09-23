@@ -1,0 +1,51 @@
+{
+  "passed": 6,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Homepage header wordmark has no extra registered-symbol text",
+      "name": "header-wordmark-plain",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844 the home-logo-button textContent is exactly 'BDSM' with no ® symbol."
+    },
+    {
+      "criterion": "Mobile menu button reliably opens the navigation drawer",
+      "name": "mobile-menu-button-opens-drawer",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 360x740, 390x844, and 430x932 the open-menu-button measured ~61x44px, aria-expanded flipped false->true on click, and navigation-drawer became visible with close-menu-button in viewport at each size."
+    },
+    {
+      "criterion": "Navigation drawer footer is restored",
+      "name": "drawer-footer-restored",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844 and 1280x800 the navigation-drawer-footer text contains 'HELLO@BDSM.CO' and '© BDSM · BDS MARVEL'."
+    },
+    {
+      "criterion": "Open drawer prevents background-page scrolling",
+      "name": "drawer-locks-background-scroll",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "computed overflow for documentElement and body was 'hidden' while drawer open at 390x844, and no longer 'hidden' after close."
+    },
+    {
+      "criterion": "Mobile drawer closes reliably",
+      "name": "drawer-closes-button-and-escape",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844 close-menu-button click closed the drawer; reopening and pressing Escape also closed it; zero console errors captured during the flow."
+    },
+    {
+      "criterion": "Mobile navigation remains usable",
+      "name": "mobile-nav-items-usable-and-navigate",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "At 390x844 all 7 nav-*-link testids were visible, document.documentElement.scrollWidth - window.innerWidth <= 1px (no overflow), clicking nav-catalogue-link closed the drawer and navigated to /catalogue."
+    }
+  ]
+}

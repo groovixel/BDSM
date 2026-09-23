@@ -790,6 +790,7 @@ function ExperiencePage() {
 function BookingModal({ stay, onClose }) {
   const [form, setForm] = useState({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
   const [status, setStatus] = useState({ state: "idle", error: "" });
+  const [booked, setBooked] = useState([]);
   const firstFieldRef = useRef(null);
   const scrollResumeRef = useRef(null);
   const open = Boolean(stay);
@@ -800,6 +801,10 @@ function BookingModal({ stay, onClose }) {
     if (open) {
       setStatus({ state: "idle", error: "" });
       setForm({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
+      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/stays/availability?stay=${encodeURIComponent(stay.name)}`)
+        .then((res) => (res.ok ? res.json() : { booked: [] }))
+        .then((data) => setBooked(data.booked || []))
+        .catch(() => setBooked([]));
       window.setTimeout(() => firstFieldRef.current?.focus(), 80);
       document.body.style.overflow = "hidden";
       stopSmoothScroll();
@@ -813,10 +818,16 @@ function BookingModal({ stay, onClose }) {
 
   const update = (field) => (event) => setForm((prev) => ({ ...prev, [field]: event.target.value }));
 
+  const overlapping = booked.find((range) => form.checkIn && form.checkOut && form.checkIn < range.check_out && form.checkOut > range.check_in);
+
   const submit = async (event) => {
     event.preventDefault();
     if (form.checkOut && form.checkIn && form.checkOut <= form.checkIn) {
       setStatus({ state: "error", error: "Check-out must be after check-in." });
+      return;
+    }
+    if (overlapping) {
+      setStatus({ state: "error", error: `Those nights are already booked (${overlapping.check_in} to ${overlapping.check_out}). Please pick different dates.` });
       return;
     }
     setStatus({ state: "sending", error: "" });
@@ -824,7 +835,8 @@ function BookingModal({ stay, onClose }) {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/bookings`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stay: stay.name, name: form.name.trim(), email: form.email.trim(), check_in: form.checkIn, check_out: form.checkOut, guests: Number(form.guests), message: form.message.trim() || null }) });
       if (!response.ok) {
         const detail = await response.json().catch(() => ({}));
-        throw new Error(detail?.detail?.[0]?.msg || "Please double-check your details and try again.");
+        const message = typeof detail?.detail === "string" ? detail.detail : detail?.detail?.[0]?.msg;
+        throw new Error(message || "Please double-check your details and try again.");
       }
       setStatus({ state: "sent", error: "" });
     } catch (error) {
@@ -848,6 +860,7 @@ function BookingModal({ stay, onClose }) {
         <label className="cm-field"><span>Email</span><input required type="email" value={form.email} onChange={update("email")} placeholder="you@email.com" data-testid="booking-email-input" /></label>
         <label className="cm-field"><span>Check-in</span><input required type="date" min={today} value={form.checkIn} onChange={update("checkIn")} data-testid="booking-checkin-input" /></label>
         <label className="cm-field"><span>Check-out</span><input required type="date" min={form.checkIn || today} value={form.checkOut} onChange={update("checkOut")} data-testid="booking-checkout-input" /></label>
+        {booked.length > 0 && <div className="cm-booked" data-testid="booking-booked-ranges"><span>Already booked:</span>{booked.map((range) => <em key={`${range.check_in}-${range.check_out}`}>{range.check_in} → {range.check_out}</em>)}</div>}
         <label className="cm-field cm-field--full"><span>Guests</span><select value={form.guests} onChange={update("guests")} data-testid="booking-guests-select">{Array.from({ length: stay.guests }, (_, i) => i + 1).map((count) => <option key={count} value={count}>{count} {count === 1 ? "guest" : "guests"}</option>)}</select></label>
         <label className="cm-field cm-field--full"><span>Anything we should know? (optional)</span><textarea rows={3} value={form.message} onChange={update("message")} placeholder="Arrival time, occasions, material walkthrough requests…" data-testid="booking-message-input" /></label>
         {status.state === "error" && <div className="cm-error" data-testid="booking-modal-error">{status.error}</div>}

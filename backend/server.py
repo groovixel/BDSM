@@ -304,6 +304,10 @@ async def create_booking(payload: BookingCreate):
         raise HTTPException(status_code=422, detail="Dates must be YYYY-MM-DD")
     if check_out <= check_in:
         raise HTTPException(status_code=422, detail="Check-out must be after check-in")
+    existing = await db.bookings.find({"stay": payload.stay}, {"_id": 0, "check_in": 1, "check_out": 1}).to_list(500)
+    for other in existing:
+        if payload.check_in < other["check_out"] and payload.check_out > other["check_in"]:
+            raise HTTPException(status_code=409, detail=f"Those nights are already booked ({other['check_in']} to {other['check_out']}). Please pick different dates.")
     booking = Booking(**payload.model_dump())
     doc = booking.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
@@ -326,6 +330,13 @@ async def list_bookings(limit: int = 50):
         if isinstance(row.get('created_at'), str):
             row['created_at'] = datetime.fromisoformat(row['created_at'])
     return rows
+
+
+@api_router.get("/stays/availability")
+async def stays_availability(stay: Optional[str] = None):
+    query = {"stay": stay} if stay else {}
+    rows = await db.bookings.find(query, {"_id": 0, "stay": 1, "check_in": 1, "check_out": 1}).to_list(1000)
+    return {"booked": rows}
 
 # Include the router in the main app
 app.include_router(api_router)

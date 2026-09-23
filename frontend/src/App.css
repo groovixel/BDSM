@@ -962,3 +962,4 @@ html.lenis,html.lenis body{height:auto}
 .cm-booked{grid-column:1/-1;font:10px var(--mono);letter-spacing:.06em;color:#ffffff99;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .cm-booked span{text-transform:uppercase;letter-spacing:.14em;color:#ffffff66}
 .cm-booked em{font-style:normal;border:1px solid #ffffff33;padding:5px 9px;color:#ffffffcc}
+.cm-booked--pending em{border-style:dashed;color:#ffffff80}

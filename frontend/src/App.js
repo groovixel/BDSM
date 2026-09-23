@@ -791,6 +791,7 @@ function BookingModal({ stay, onClose }) {
   const [form, setForm] = useState({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
   const [status, setStatus] = useState({ state: "idle", error: "" });
   const [booked, setBooked] = useState([]);
+  const [pending, setPending] = useState([]);
   const firstFieldRef = useRef(null);
   const scrollResumeRef = useRef(null);
   const open = Boolean(stay);
@@ -802,9 +803,9 @@ function BookingModal({ stay, onClose }) {
       setStatus({ state: "idle", error: "" });
       setForm({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
       fetch(`${process.env.REACT_APP_BACKEND_URL}/api/stays/availability?stay=${encodeURIComponent(stay.name)}`)
-        .then((res) => (res.ok ? res.json() : { booked: [] }))
-        .then((data) => setBooked(data.booked || []))
-        .catch(() => setBooked([]));
+        .then((res) => (res.ok ? res.json() : { booked: [], requested: [] }))
+        .then((data) => { setBooked(data.booked || []); setPending(data.requested || []); })
+        .catch(() => { setBooked([]); setPending([]); });
       window.setTimeout(() => firstFieldRef.current?.focus(), 80);
       document.body.style.overflow = "hidden";
       stopSmoothScroll();
@@ -861,6 +862,7 @@ function BookingModal({ stay, onClose }) {
         <label className="cm-field"><span>Check-in</span><input required type="date" min={today} value={form.checkIn} onChange={update("checkIn")} data-testid="booking-checkin-input" /></label>
         <label className="cm-field"><span>Check-out</span><input required type="date" min={form.checkIn || today} value={form.checkOut} onChange={update("checkOut")} data-testid="booking-checkout-input" /></label>
         {booked.length > 0 && <div className="cm-booked" data-testid="booking-booked-ranges"><span>Already booked:</span>{booked.map((range) => <em key={`${range.check_in}-${range.check_out}`}>{range.check_in} → {range.check_out}</em>)}</div>}
+        {pending.length > 0 && <div className="cm-booked cm-booked--pending" data-testid="booking-pending-ranges"><span>Awaiting confirmation:</span>{pending.map((range) => <em key={`${range.check_in}-${range.check_out}`}>{range.check_in} → {range.check_out}</em>)}</div>}
         <label className="cm-field cm-field--full"><span>Guests</span><select value={form.guests} onChange={update("guests")} data-testid="booking-guests-select">{Array.from({ length: stay.guests }, (_, i) => i + 1).map((count) => <option key={count} value={count}>{count} {count === 1 ? "guest" : "guests"}</option>)}</select></label>
         <label className="cm-field cm-field--full"><span>Anything we should know? (optional)</span><textarea rows={3} value={form.message} onChange={update("message")} placeholder="Arrival time, occasions, material walkthrough requests…" data-testid="booking-message-input" /></label>
         {status.state === "error" && <div className="cm-error" data-testid="booking-modal-error">{status.error}</div>}

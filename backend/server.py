@@ -270,6 +270,7 @@ class Booking(BaseModel):
     check_out: str
     guests: int
     message: Optional[str] = None
+    status: str = "requested"
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
@@ -304,7 +305,7 @@ async def create_booking(payload: BookingCreate):
         raise HTTPException(status_code=422, detail="Dates must be YYYY-MM-DD")
     if check_out <= check_in:
         raise HTTPException(status_code=422, detail="Check-out must be after check-in")
-    existing = await db.bookings.find({"stay": payload.stay}, {"_id": 0, "check_in": 1, "check_out": 1}).to_list(500)
+    existing = await db.bookings.find({"stay": payload.stay, "status": "confirmed"}, {"_id": 0, "check_in": 1, "check_out": 1}).to_list(500)
     for other in existing:
         if payload.check_in < other["check_out"] and payload.check_out > other["check_in"]:
             raise HTTPException(status_code=409, detail=f"Those nights are already booked ({other['check_in']} to {other['check_out']}). Please pick different dates.")
@@ -335,8 +336,28 @@ async def list_bookings(limit: int = 50):
 @api_router.get("/stays/availability")
 async def stays_availability(stay: Optional[str] = None):
     query = {"stay": stay} if stay else {}
-    rows = await db.bookings.find(query, {"_id": 0, "stay": 1, "check_in": 1, "check_out": 1}).to_list(1000)
-    return {"booked": rows}
+    projection = {"_id": 0, "stay": 1, "check_in": 1, "check_out": 1}
+    confirmed = await db.bookings.find({**query, "status": "confirmed"}, projection).to_list(1000)
+    requested = await db.bookings.find({**query, "status": "requested"}, projection).to_list(1000)
+    return {"booked": confirmed, "requested": requested}
+
+
+class BookingStatusUpdate(BaseModel):
+    status: str
+
+
+@api_router.post("/bookings/{booking_id}/status", response_model=Booking)
+async def update_booking_status(booking_id: str, payload: BookingStatusUpdate):
+    if payload.status not in ("requested", "confirmed", "cancelled"):
+        raise HTTPException(status_code=422, detail="Status must be requested, confirmed or cancelled")
+    result = await db.bookings.update_one({"id": booking_id}, {"$set": {"status": payload.status}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    doc = await db.bookings.find_one({"id": booking_id}, {"_id": 0})
+    if isinstance(doc.get('created_at'), str):
+        doc['created_at'] = datetime.fromisoformat(doc['created_at'])
+    logger.info("Booking %s marked %s", booking_id, payload.status)
+    return doc
 
 # Include the router in the main app
 app.include_router(api_router)

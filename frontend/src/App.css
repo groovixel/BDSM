@@ -121,11 +121,11 @@
 @media(max-width:900px){.network-rail{left:4vw;padding:16px 6px}.network-rail__list button{font-size:11px}.network-rail__item--active button{font-size:16px}}
 
 .network-panel{min-height:100vh;padding:120px 7vw 90px 180px;display:grid;grid-template-columns:1.05fr 1fr;grid-template-rows:auto 1fr;column-gap:60px;row-gap:38px;align-items:center;color:var(--ink);position:relative}
-.network-panel--sand{background:#f5ecc9}
+.network-panel--sand{background:#e5d8c1}
 .network-panel--bronze{background:#c9a888}
-.network-panel--charcoal{background:#f5ecc9}
+.network-panel--charcoal{background:#c8c1b3}
 .network-panel--terracotta{background:#b8a394}
-.network-panel--sage{background:#f5ecc9}
+.network-panel--sage{background:#eedcae}
 .network-panel--coral{background:#b9b49a}
 .network-panel--yellow{background:#c9a888}
 .network-panel--pink{background:#d9a48a}

@@ -872,7 +872,7 @@ function BookingModal({ stay, onClose }) {
     <div className="contact-modal__panel">
       <button className="contact-modal__close" onClick={onClose} aria-label="Close" data-testid="booking-modal-close"><X size={22} /></button>
       <div className="contact-modal__intro">
-        <span className="section-index">BOOK A STAY · {stay.tier.toUpperCase()}</span>
+        <span className="section-index">BOOK A STAY</span>
         <h2>{stay.name}</h2>
         <p>{stay.location} · from {stay.price}/night · sleeps {stay.guests}. Send your dates — we confirm availability within one working day.</p>
         <div className="contact-modal__meta"><span>info.bdsmarvel@gmail.com</span><span>{stay.location}</span></div>
@@ -895,9 +895,9 @@ function BookingModal({ stay, onClose }) {
 
 function StayCard({ stay, index, onBook }) {
   return <article className={`stay-card ${index % 2 === 1 ? "stay-card--flip" : ""}`} data-testid={`stay-card-${stay.slug}`}>
-    <div className="stay-card__media"><img src={img(stay.hero, 1200)} alt={stay.name} loading="lazy" /><span className="stay-card__tier" data-testid={`stay-tier-${stay.slug}`}>{stay.tier}</span></div>
+    <div className="stay-card__media"><img src={img(stay.hero, 1200)} alt={stay.name} loading="lazy" /></div>
     <div className="stay-card__body">
-      <span className="section-index">{String(index + 1).padStart(2, "0")} — {stay.tier.toUpperCase()}</span>
+      <span className="section-index">{String(index + 1).padStart(2, "0")}</span>
       <h2>{stay.name}</h2>
       <p className="stay-card__location">{stay.location} · {stay.bedrooms} {stay.bedrooms === 1 ? "bedroom" : "bedrooms"} · sleeps {stay.guests}</p>
       <p className="stay-card__description">{stay.description}</p>
@@ -928,7 +928,7 @@ function StaysPage() {
               <h3>{tier.headline}</h3>
               <p>{tier.copy}</p>
               <span className="stay-tier-card__meta">{tierStays.length} stays · from {lowest}/night</span>
-              <span className="stay-tier-card__cta">BROWSE {tier.name.toUpperCase()} <ArrowUpRight size={15} /></span>
+              <span className="stay-tier-card__cta">EXPLORE STAYS <ArrowUpRight size={15} /></span>
             </div>
           </Link>;
         })}
@@ -946,8 +946,8 @@ function StaysCategoryPage() {
   if (!meta) return <Navigate to="/stays" replace />;
   return <main className="stays-page" data-testid="stays-category-page">
     <section className="stays-hero">
-      <div className="detail-kicker"><span>BDSM · STAYS — {meta.name.toUpperCase()}</span><Link to="/stays" data-testid="stays-category-back-link">ALL CATEGORIES</Link></div>
-      <div className="stays-hero__copy"><p className="eyebrow">{meta.name.toUpperCase()} · {tierStays.length} STAYS</p><h1>{meta.headline.replace(/\.$/, "")}<br /><em>Pick your stay.</em></h1><p>{meta.copy}</p></div>
+      <div className="detail-kicker"><span>BDSM · STAYS</span><Link to="/stays" data-testid="stays-category-back-link">ALL CATEGORIES</Link></div>
+      <div className="stays-hero__copy"><p className="eyebrow">{tierStays.length} STAYS</p><h1>{meta.headline.replace(/\.$/, "")}<br /><em>Pick your stay.</em></h1><p>{meta.copy}</p></div>
     </section>
     <section className="stays-list" data-testid="stays-list">
       {tierStays.map((stay, index) => <StayCard key={stay.slug} stay={stay} index={index} onBook={setBooking} />)}

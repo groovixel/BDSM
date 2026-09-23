@@ -498,7 +498,7 @@ function ExperienceSpotlight() {
     <div className="experience-spotlight__layout">
       <div className="experience-spotlight__visual" style={{ backgroundImage: `linear-gradient(180deg, rgba(8,8,8,.08), rgba(8,8,8,.68)), url(${img(livingStudio.hero)})` }} data-testid="experience-spotlight-image">
         <span data-testid="experience-spotlight-location">{livingStudio.kicker}</span>
-        <strong data-testid="experience-spotlight-image-title">STAY INSIDE<br />THE MATERIAL.</strong>
+        <strong data-testid="experience-spotlight-image-title">STAY INSIDE<br />WHAT WE BUILT.</strong>
       </div>
       <div className="experience-spotlight__copy" ref={copyRef}>
         <span className="experience-spotlight__badge" data-testid="experience-spotlight-badge">STAY OVER</span>

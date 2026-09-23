@@ -416,7 +416,7 @@ function NetworkExperience() {
           <span className="network-panel__mascot-wrap"><img src={img(segment.hero)} alt={`${segment.name} sample`} className="network-panel__mascot" /></span>
         </div>
         <div className="network-panel__copy" ref={(node) => (copyRefs.current[index] = node)} data-copy-index={index}>
-          <div className="network-panel__brand"><span className="np-brand-parent">{segment.parent}</span><span className="np-brand-name">{segment.name}</span></div>
+          <div className="network-panel__brand"><span className="np-brand-parent">BDS Marvel</span><span className="np-brand-name">{segment.name}</span></div>
           <h3>{segment.tagline}</h3>
           <p>{segment.body}</p>
           <ul className="network-panel__tags">{segment.services.map((service, tagIndex) => <li key={service} style={{ "--i": tagIndex }}>{service}</li>)}</ul>

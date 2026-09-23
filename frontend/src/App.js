@@ -784,7 +784,7 @@ function ExperiencePage() {
         {stayTiers.map((tier) => {
           const first = stays.find((stay) => stay.tier === tier.name);
           return <Link to={`/stays/${tier.slug}`} className="stay-tier-card" key={tier.slug} data-testid={`experience-tier-${tier.slug}`}>
-            <div className="stay-tier-card__media"><img src={img(first.hero, 900)} alt={`${tier.name} stays`} loading="lazy" /><span className="stay-tier-card__tier">{tier.name}</span></div>
+            <div className="stay-tier-card__media"><img src={img(first.hero, 900)} alt={`${tier.name} stays`} loading="lazy" /></div>
             <div className="stay-tier-card__body">
               <h3>{tier.headline}</h3>
               <p>{tier.copy}</p>
@@ -923,7 +923,7 @@ function StaysPage() {
           const tierStays = stays.filter((stay) => stay.tier === tier.name);
           const lowest = tierStays.map((stay) => stay.price).sort()[0];
           return <Link to={`/stays/${tier.slug}`} className="stay-tier-card" key={tier.slug} data-testid={`stays-tier-${tier.slug}`}>
-            <div className="stay-tier-card__media"><img src={img(tierStays[0].hero, 900)} alt={`${tier.name} stays`} /><span className="stay-tier-card__tier">{tier.name}</span></div>
+            <div className="stay-tier-card__media"><img src={img(tierStays[0].hero, 900)} alt={`${tier.name} stays`} /></div>
             <div className="stay-tier-card__body">
               <h3>{tier.headline}</h3>
               <p>{tier.copy}</p>

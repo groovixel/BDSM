@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useRef, useState, createContext } from "react";
 import { ArrowDown, ArrowUp, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, Loader2, Search, Twitter, X, Youtube } from "lucide-react";
-import { BrowserRouter, Link, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "@/App.css";
 import { initSmoothScroll, smoothScrollTo, startSmoothScroll, stopSmoothScroll } from "@/lib/smoothScroll";
@@ -26,10 +26,33 @@ const livingStudio = {
 };
 
 const stays = [
+  // Premium — experience our work first-hand
   { slug: "living-studio", tier: "Premium", name: "The Living Studio", location: "Alibaug, Maharashtra", price: "₹28,000", guests: 6, bedrooms: 3, hero: "photo-1600607687939-ce8a6c25118c", blurb: "Our flagship stayable showroom — every surface is our own work.", description: "The premium way to experience BDS Marvel: a full guesthouse built end-to-end with our own stone, flooring, finishes and furniture. Stay the night, host your architect over breakfast, walk the materials library with our consultant and specify your project from inside a working reference.", amenities: ["Three ensuite suites", "Hosted materials walkthrough", "Private garden + sunken lounge", "Full breakfast & chef on request", "Sample library access", "Airport transfer on request"] },
+  { slug: "stone-pavilion", tier: "Premium", name: "The Stone Pavilion", location: "Lonavala, Maharashtra", price: "₹32,000", guests: 8, bedrooms: 4, hero: "photo-1747258818911-dfde27ecabba", blurb: "A pavilion of glass and our own basalt, wrapped around a reflecting pool.", description: "Four suites arranged around a still reflecting pool, every wall in basalt we cut ourselves. Evenings on the water court, mornings in the sauna — the full BDS Marvel material palette at its most resolved.", amenities: ["Four pool-facing suites", "Private sauna & plunge", "Chef-led dinners", "Materials walkthrough", "Bonfire court", "Driver on call"] },
+  { slug: "marble-house", tier: "Premium", name: "The Marble House", location: "Udaipur, Rajasthan", price: "₹30,000", guests: 6, bedrooms: 3, hero: "photo-1729605412224-147d072d3667", blurb: "Lake-facing suites in book-matched marble, ten minutes from the old city.", description: "A lake-facing residence where every bathroom is book-matched marble from our Kishangarh workshop. Sunset terraces, a butler pantry and quiet, cool rooms that show what stone does to light.", amenities: ["Three lake-view suites", "Book-matched marble baths", "Sunset terrace", "Butler pantry", "City walkthroughs on request"] },
+  { slug: "verandah-suite", tier: "Premium", name: "The Verandah Suite", location: "Assagao, Goa", price: "₹24,000", guests: 4, bedrooms: 2, hero: "photo-1663811396672-83dd3f32f312", blurb: "A shaded laterite verandah, a plunge pool and nothing to prove.", description: "Our Goan outpost: laterite walls, a deep shaded verandah and a plunge pool under the trees. Two suites, an outdoor kitchen and the quietest version of our material palette.", amenities: ["Two garden suites", "Laterite verandah", "Plunge pool", "Outdoor kitchen", "Scooter on request"] },
+  { slug: "atelier-penthouse", tier: "Premium", name: "The BDS Penthouse", location: "Bandra, Mumbai", price: "₹36,000", guests: 6, bedrooms: 3, hero: "photo-1756906838752-0b514ab37479", blurb: "Our city showcase — a split-level penthouse over the sea link skyline.", description: "The city flagship: a split-level penthouse with a double-height stone wall, terrazzo stair and a screening lounge. Host your project team, walk the flat with our designers and leave with a spec sheet.", amenities: ["Three skyline suites", "Double-height stone wall", "Screening lounge", "Design consult included", "Valet & chef on request"] },
+  // Mid — design comfort, city ease
   { slug: "material-loft", tier: "Mid", name: "The Material Loft", location: "Jaipur, Rajasthan", price: "₹12,500", guests: 4, bedrooms: 2, hero: "photo-1737467030068-88ad20e617ca", blurb: "A warm city loft finished in our stone and oak — design comfort without the ceremony.", description: "A two-bedroom city loft for travellers who want to live with good material without the full showroom programme. Oak plank floors, honed stone counters and hand-finished lime walls — the same spec we install for clients, at an easy nightly rate.", amenities: ["Two queen bedrooms", "Full kitchen in honed stone", "Work nook with fibre wifi", "Self check-in", "Breakfast basket on request"] },
+  { slug: "oak-apartment", tier: "Mid", name: "The Oak Apartment", location: "Pune, Maharashtra", price: "₹10,500", guests: 4, bedrooms: 2, hero: "photo-1789381500057-2a288d79e9e6", blurb: "Wall-to-wall oak, soft light and a proper work table.", description: "A calm two-bedroom apartment panelled in our engineered oak, with a long work table for travelling teams and a kitchen that invites slow mornings.", amenities: ["Two bedrooms", "Engineered oak throughout", "Dedicated work table", "Full kitchen", "Self check-in"] },
+  { slug: "kota-flat", tier: "Mid", name: "The Kota Flat", location: "New Delhi", price: "₹9,800", guests: 3, bedrooms: 1, hero: "photo-1661796428175-55423b19409f", blurb: "A sunlit one-bed on Kota stone floors, minutes from the metro.", description: "A bright one-bedroom flat that shows off what humble Kota stone can do — cool floors, warm textiles, a reading corner and an easy commute to anywhere in the city.", amenities: ["One sunny bedroom", "Kota stone floors", "Reading corner", "Kitchenette", "Metro 5 min walk"] },
+  { slug: "terrace-rooms", tier: "Mid", name: "The Terrace Rooms", location: "Bengaluru, Karnataka", price: "₹11,200", guests: 4, bedrooms: 2, hero: "photo-1781249144129-4ba0869707f5", blurb: "Two rooms, one big planted terrace, evening breeze included.", description: "A two-bedroom stay built around its planted terrace — outdoor dining for six, warm wood interiors and blackout shutters for proper sleep after long site days.", amenities: ["Two bedrooms", "Planted dining terrace", "Outdoor seating for six", "Blackout shutters", "Self check-in"] },
+  { slug: "weavers-stay", tier: "Mid", name: "The Weaver's Stay", location: "Ahmedabad, Gujarat", price: "₹9,500", guests: 3, bedrooms: 1, hero: "photo-1781249144056-ec397e444dfa", blurb: "Textiles, lime plaster and a courtyard cafe downstairs.", description: "A one-bedroom stay above a courtyard cafe in the old textile district — lime plaster walls, handloom throws and our stone in the bath. Quiet, central, easy.", amenities: ["One bedroom + daybed", "Lime plaster & handloom", "Courtyard cafe below", "Stone-clad bath", "Self check-in"] },
+  // Budget-friendly — honest rooms, honest prices
   { slug: "courtyard-room", tier: "Budget-friendly", name: "The Courtyard Room", location: "Kishangarh, Rajasthan", price: "₹5,800", guests: 2, bedrooms: 1, hero: "photo-1576354302919-96748cb8299e", blurb: "A simple, honest room beside our workshop — stone underfoot, sun in the courtyard.", description: "Our budget-friendly stay: a quiet, light-filled room next to the Kishangarh workshop. Honest materials, a proper bed, a shaded courtyard and chai from the studio kitchen. Perfect for a night between site visits — or your first look at what we make.", amenities: ["Queen bed, ensuite bath", "Shaded shared courtyard", "Studio chai & breakfast", "Workshop viewing on request", "Self check-in"] },
+  { slug: "studio-nook", tier: "Budget-friendly", name: "The Studio Nook", location: "Ajmer, Rajasthan", price: "₹3,900", guests: 2, bedrooms: 1, hero: "photo-1759264244726-adde4e4318fc", blurb: "A neat little room five minutes from the dargah road.", description: "The simplest stay we make: a crisp bed, a writing desk, a hot shower and morning sun. Everything you need between trains, site visits and long drives.", amenities: ["Queen bed", "Writing desk", "Hot rain shower", "Morning chai", "Self check-in"] },
+  { slug: "workshop-room", tier: "Budget-friendly", name: "The Workshop Room", location: "Kishangarh, Rajasthan", price: "₹4,200", guests: 2, bedrooms: 1, hero: "photo-1759264244746-140bbbc54e1b", blurb: "Fall asleep to the smell of cut stone — a room inside our workshop compound.", description: "A snug room inside the workshop compound for people who want to wake up where the material is made. Early morning cutting demos if you ask nicely.", amenities: ["Queen bed, ensuite", "Inside the workshop compound", "Cutting demos on request", "Studio breakfast", "Self check-in"] },
+  { slug: "sunroom", tier: "Budget-friendly", name: "The Sunroom", location: "Pushkar, Rajasthan", price: "₹4,600", guests: 2, bedrooms: 1, hero: "photo-1781004667187-d1f862f8fa0b", blurb: "A glass-cornered room that catches the desert morning.", description: "A corner room wrapped in glass on two sides, five minutes from the lake ghats. Sunrise does the decorating; we did the stone floor and the very good mattress.", amenities: ["Glass corner room", "Stone floor", "Lake ghats 5 min", "Rooftop chai", "Self check-in"] },
+  { slug: "lime-wash-room", tier: "Budget-friendly", name: "The Lime Wash Room", location: "Jaipur, Rajasthan", price: "₹4,900", guests: 2, bedrooms: 1, hero: "photo-1780399334790-64af9ffb45fc", blurb: "Hand-trowelled lime walls and a deep, dark night's sleep.", description: "A cocoon of hand-trowelled lime plaster in the old city — cool in summer, warm at night, with a tiny balcony for evening chai. Our cheapest night, and many guests' favourite.", amenities: ["Queen bed", "Hand-trowelled lime walls", "Chai balcony", "Old-city location", "Self check-in"] },
 ];
+
+const stayTiers = [
+  { slug: "premium", name: "Premium", headline: "Experience our work, first-hand.", copy: "Full homes built end-to-end with our own stone, floors and furniture — hosted walkthroughs, chef breakfasts and the materials library. Live in the reference before you specify it." },
+  { slug: "mid", name: "Mid", headline: "Design comfort, city ease.", copy: "Finished apartments wearing our oak, stone and lime — work tables, good kitchens, self check-in and easy nightly rates." },
+  { slug: "budget-friendly", name: "Budget-friendly", headline: "Honest rooms, honest prices.", copy: "Simple, light-filled rooms near our workshops and the old cities — the essentials done properly, from ₹3,900 a night." },
+];
+
+const tierSlugOf = (tierName) => stayTiers.find((tier) => tier.name === tierName)?.slug || "premium";
 
 const approach = [
   { number: "01", title: "MATERIAL FIRST", image: "photo-1618221195710-dd6b41faaea6", text: "Every project begins with the stone or the surface. Specification precedes drawings so the material never has to bend to fit the design." },
@@ -763,15 +786,18 @@ function ExperiencePage() {
     <section className="experience-tiers" data-testid="experience-tiers">
       <div className="experience-tiers__heading"><span className="section-index">THREE WAYS TO STAY</span><h2>Three BnBs,<br /><em>three kinds of night.</em></h2><p>From the flagship Living Studio — where you experience our work first-hand — to an easy city loft and an honest courtyard room by the workshop.</p></div>
       <div className="experience-tiers__grid">
-        {stays.map((stay) => <Link to="/stays" className="stay-tier-card" key={stay.slug} data-testid={`experience-tier-${stay.slug}`}>
-          <div className="stay-tier-card__media"><img src={img(stay.hero, 900)} alt={stay.name} loading="lazy" /><span className="stay-tier-card__tier">{stay.tier}</span></div>
-          <div className="stay-tier-card__body">
-            <h3>{stay.name}</h3>
-            <p>{stay.blurb}</p>
-            <span className="stay-tier-card__meta">{stay.location} · from {stay.price}/night</span>
-            <span className="stay-tier-card__cta">EXPLORE &amp; BOOK <ArrowUpRight size={15} /></span>
-          </div>
-        </Link>)}
+        {stayTiers.map((tier) => {
+          const first = stays.find((stay) => stay.tier === tier.name);
+          return <Link to={`/stays/${tier.slug}`} className="stay-tier-card" key={tier.slug} data-testid={`experience-tier-${tier.slug}`}>
+            <div className="stay-tier-card__media"><img src={img(first.hero, 900)} alt={`${tier.name} stays`} loading="lazy" /><span className="stay-tier-card__tier">{tier.name}</span></div>
+            <div className="stay-tier-card__body">
+              <h3>{tier.headline}</h3>
+              <p>{tier.copy}</p>
+              <span className="stay-tier-card__meta">{stays.filter((stay) => stay.tier === tier.name).length} stays · from {stays.filter((stay) => stay.tier === tier.name).map((stay) => stay.price).sort()[0]}/night</span>
+              <span className="stay-tier-card__cta">EXPLORE &amp; BOOK <ArrowUpRight size={15} /></span>
+            </div>
+          </Link>;
+        })}
       </div>
     </section>
     <section className="experience-gallery">
@@ -872,29 +898,64 @@ function BookingModal({ stay, onClose }) {
   </div>;
 }
 
+function StayCard({ stay, index, onBook }) {
+  return <article className={`stay-card ${index % 2 === 1 ? "stay-card--flip" : ""}`} data-testid={`stay-card-${stay.slug}`}>
+    <div className="stay-card__media"><img src={img(stay.hero, 1200)} alt={stay.name} loading="lazy" /><span className="stay-card__tier" data-testid={`stay-tier-${stay.slug}`}>{stay.tier}</span></div>
+    <div className="stay-card__body">
+      <span className="section-index">{String(index + 1).padStart(2, "0")} — {stay.tier.toUpperCase()}</span>
+      <h2>{stay.name}</h2>
+      <p className="stay-card__location">{stay.location} · {stay.bedrooms} {stay.bedrooms === 1 ? "bedroom" : "bedrooms"} · sleeps {stay.guests}</p>
+      <p className="stay-card__description">{stay.description}</p>
+      <ul className="stay-card__amenities">{stay.amenities.map((amenity) => <li key={amenity}>{amenity}</li>)}</ul>
+      <div className="stay-card__footer">
+        <span className="stay-card__price" data-testid={`stay-price-${stay.slug}`}>from <strong>{stay.price}</strong> / night</span>
+        <button type="button" className="np-btn np-btn--solid" onClick={() => onBook(stay)} data-testid={`stay-book-${stay.slug}`}>BOOK THIS STAY <ArrowUpRight size={16} /></button>
+      </div>
+    </div>
+  </article>;
+}
+
 function StaysPage() {
-  usePageMeta("Stays & BnBs | BDSM · BDS Marvel", "Explore BDSM · BDS Marvel stays — the premium Living Studio, the Material Loft and the budget-friendly Courtyard Room. Book a night directly.");
-  const [booking, setBooking] = useState(null);
+  usePageMeta("Stays & BnBs | BDSM · BDS Marvel", "Explore BDSM · BDS Marvel stays — premium, mid and budget-friendly BnBs across India. Book a night directly.");
   return <main className="stays-page" data-testid="stays-page">
     <section className="stays-hero">
       <div className="detail-kicker"><span>BDSM · STAYS</span><Link to="/experience" data-testid="stays-back-link">THE LIVING STUDIO</Link></div>
-      <div className="stays-hero__copy"><p className="eyebrow">AIR BNB · THREE CATEGORIES</p><h1>Explore our BnBs.<br /><em>Book your night.</em></h1><p>Three ways to stay with BDS Marvel — the premium Living Studio where you experience our work first-hand, the mid-range Material Loft, and the budget-friendly Courtyard Room. Pick one, send your dates, and we confirm within one working day.</p></div>
+      <div className="stays-hero__copy"><p className="eyebrow">AIR BNB · THREE CATEGORIES</p><h1>Explore our BnBs.<br /><em>Book your night.</em></h1><p>Fifteen stays across three categories — premium homes where you experience our work first-hand, easy mid-range city apartments, and honest budget-friendly rooms. Pick a category, choose your dates, and we confirm within one working day.</p></div>
+    </section>
+    <section className="experience-tiers" data-testid="stays-tier-index">
+      <div className="experience-tiers__grid">
+        {stayTiers.map((tier) => {
+          const tierStays = stays.filter((stay) => stay.tier === tier.name);
+          const lowest = tierStays.map((stay) => stay.price).sort()[0];
+          return <Link to={`/stays/${tier.slug}`} className="stay-tier-card" key={tier.slug} data-testid={`stays-tier-${tier.slug}`}>
+            <div className="stay-tier-card__media"><img src={img(tierStays[0].hero, 900)} alt={`${tier.name} stays`} /><span className="stay-tier-card__tier">{tier.name}</span></div>
+            <div className="stay-tier-card__body">
+              <h3>{tier.headline}</h3>
+              <p>{tier.copy}</p>
+              <span className="stay-tier-card__meta">{tierStays.length} stays · from {lowest}/night</span>
+              <span className="stay-tier-card__cta">BROWSE {tier.name.toUpperCase()} <ArrowUpRight size={15} /></span>
+            </div>
+          </Link>;
+        })}
+      </div>
+    </section>
+  </main>;
+}
+
+function StaysCategoryPage() {
+  const { tier } = useParams();
+  const meta = stayTiers.find((item) => item.slug === tier);
+  const tierStays = stays.filter((stay) => tierSlugOf(stay.tier) === tier);
+  const [booking, setBooking] = useState(null);
+  usePageMeta(meta ? `${meta.name} Stays | BDSM · BDS Marvel` : "Stays | BDSM · BDS Marvel", meta ? `${meta.headline} ${meta.copy}` : "Explore BDSM · BDS Marvel stays.");
+  if (!meta) return <Navigate to="/stays" replace />;
+  return <main className="stays-page" data-testid="stays-category-page">
+    <section className="stays-hero">
+      <div className="detail-kicker"><span>BDSM · STAYS — {meta.name.toUpperCase()}</span><Link to="/stays" data-testid="stays-category-back-link">ALL CATEGORIES</Link></div>
+      <div className="stays-hero__copy"><p className="eyebrow">{meta.name.toUpperCase()} · {tierStays.length} STAYS</p><h1>{meta.headline.replace(/\.$/, "")}<br /><em>Pick your stay.</em></h1><p>{meta.copy}</p></div>
     </section>
     <section className="stays-list" data-testid="stays-list">
-      {stays.map((stay, index) => <article className={`stay-card ${index % 2 === 1 ? "stay-card--flip" : ""}`} key={stay.slug} data-testid={`stay-card-${stay.slug}`}>
-        <div className="stay-card__media"><img src={img(stay.hero, 1200)} alt={stay.name} loading="lazy" /><span className="stay-card__tier" data-testid={`stay-tier-${stay.slug}`}>{stay.tier}</span></div>
-        <div className="stay-card__body">
-          <span className="section-index">{String(index + 1).padStart(2, "0")} — {stay.tier.toUpperCase()}</span>
-          <h2>{stay.name}</h2>
-          <p className="stay-card__location">{stay.location} · {stay.bedrooms} {stay.bedrooms === 1 ? "bedroom" : "bedrooms"} · sleeps {stay.guests}</p>
-          <p className="stay-card__description">{stay.description}</p>
-          <ul className="stay-card__amenities">{stay.amenities.map((amenity) => <li key={amenity}>{amenity}</li>)}</ul>
-          <div className="stay-card__footer">
-            <span className="stay-card__price" data-testid={`stay-price-${stay.slug}`}>from <strong>{stay.price}</strong> / night</span>
-            <button type="button" className="np-btn np-btn--solid" onClick={() => setBooking(stay)} data-testid={`stay-book-${stay.slug}`}>BOOK THIS STAY <ArrowUpRight size={16} /></button>
-          </div>
-        </div>
-      </article>)}
+      {tierStays.map((stay, index) => <StayCard key={stay.slug} stay={stay} index={index} onBook={setBooking} />)}
     </section>
     <BookingModal stay={booking} onClose={() => setBooking(null)} />
   </main>;
@@ -1094,6 +1155,7 @@ function App() {
           <Route path="/catalogue" element={<CataloguePage />} />
           <Route path="/experience" element={<ExperiencePage />} />
           <Route path="/stays" element={<StaysPage />} />
+          <Route path="/stays/:tier" element={<StaysCategoryPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/work" element={<ProjectsArchive />} />
           <Route path="/work/:slug" element={<ProjectPage />} />

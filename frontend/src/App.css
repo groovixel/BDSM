@@ -910,4 +910,51 @@ html.lenis,html.lenis body{height:auto}
 }
 
 /* Clientele label: +10% size, bold */
+
+/* Stays page + experience tier cards */
+.stays-page{background:var(--paper);color:var(--ink);padding-top:78px}
+.stays-hero{background:var(--ink);color:var(--paper);padding:60px 7vw 110px;min-height:520px;display:flex;flex-direction:column}
+.stays-hero .detail-kicker a{color:var(--acid);text-decoration:none}
+.stays-hero__copy{margin-top:auto;max-width:900px}
+.stays-hero__copy h1{font-size:clamp(56px,9vw,140px);line-height:.88;letter-spacing:-.06em;font-weight:500;margin:24px 0 30px}
+.stays-hero__copy h1 em{color:var(--acid);font-style:italic;font-weight:300}
+.stays-hero__copy p:not(.eyebrow){font-size:19px;line-height:1.45;max-width:640px;color:#ffffffb3}
+.stays-list{padding:110px 7vw;display:flex;flex-direction:column;gap:90px}
+.stay-card{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center}
+.stay-card--flip .stay-card__media{order:2}
+.stay-card__media{position:relative}
+.stay-card__media img{display:block;width:100%;height:520px;object-fit:cover}
+.stay-card__tier,.stay-tier-card__tier{position:absolute;top:18px;left:18px;background:var(--acid);color:var(--ink);font:10px var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:8px 12px}
+.stay-card__body h2{font-size:clamp(38px,4.6vw,64px);line-height:.95;letter-spacing:-.05em;font-weight:500;margin:20px 0 14px}
+.stay-card__location{font:11px var(--mono);letter-spacing:.08em;color:#0a0a0a80;text-transform:uppercase;margin:0 0 20px}
+.stay-card__description{font-size:16px;line-height:1.6;color:#0a0a0acc;max-width:520px}
+.stay-card__amenities{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-wrap:wrap;gap:9px}
+.stay-card__amenities li{border:1px solid #0a0a0a33;padding:8px 12px;font:10px var(--mono);letter-spacing:.06em;color:#0a0a0acc;text-transform:uppercase}
+.stay-card__footer{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:36px;flex-wrap:wrap}
+.stay-card__price{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#0a0a0a99}
+.stay-card__price strong{font-size:22px;letter-spacing:-.02em;color:var(--ink);font-weight:600}
+.experience-tiers{padding:110px 7vw;background:#f5f2ea}
+.experience-tiers__heading h2{font-size:clamp(46px,6vw,94px);line-height:.9;letter-spacing:-.06em;font-weight:500;margin:20px 0 18px}
+.experience-tiers__heading h2 em{font-style:italic;font-weight:300}
+.experience-tiers__heading p{font-size:16px;line-height:1.55;max-width:560px;color:#0a0a0ab3;margin:0 0 54px}
+.experience-tiers__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.stay-tier-card{background:#fff;color:var(--ink);text-decoration:none;display:flex;flex-direction:column;transition:transform .35s ease,box-shadow .35s ease}
+.stay-tier-card:hover{transform:translateY(-6px);box-shadow:0 24px 50px #14141414}
+.stay-tier-card__media{position:relative;overflow:hidden}
+.stay-tier-card__media img{display:block;width:100%;height:280px;object-fit:cover;transition:transform .6s ease}
+.stay-tier-card:hover .stay-tier-card__media img{transform:scale(1.05)}
+.stay-tier-card__body{padding:26px 26px 30px;display:flex;flex-direction:column;gap:12px;flex:1}
+.stay-tier-card__body h3{font-size:26px;line-height:1.05;letter-spacing:-.03em;font-weight:500;margin:0}
+.stay-tier-card__body p{font-size:14px;line-height:1.55;color:#0a0a0ab3;margin:0;flex:1}
+.stay-tier-card__meta{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#0a0a0a80}
+.stay-tier-card__cta{display:inline-flex;align-items:center;gap:8px;font:10px var(--mono);letter-spacing:.1em;border-bottom:1px solid currentColor;width:max-content;padding-bottom:6px}
+@media(max-width:900px){
+  .stays-list{padding:70px 6vw;gap:64px}
+  .stay-card{grid-template-columns:1fr;gap:28px}
+  .stay-card--flip .stay-card__media{order:0}
+  .stay-card__media img{height:300px}
+  .stays-hero{min-height:460px;padding:48px 6vw 70px}
+  .experience-tiers{padding:70px 6vw}
+  .experience-tiers__grid{grid-template-columns:1fr}
+}
 .clients-title .section-index{font-size:11px;font-weight:700}

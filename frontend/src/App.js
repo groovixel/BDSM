@@ -25,6 +25,12 @@ const livingStudio = {
   details: ["Three suites", "Material library", "Hosted walkthroughs"],
 };
 
+const stays = [
+  { slug: "living-studio", tier: "Premium", name: "The Living Studio", location: "Alibaug, Maharashtra", price: "₹28,000", guests: 6, bedrooms: 3, hero: "photo-1600607687939-ce8a6c25118c", blurb: "Our flagship stayable showroom — every surface is our own work.", description: "The premium way to experience BDS Marvel: a full guesthouse built end-to-end with our own stone, flooring, finishes and furniture. Stay the night, host your architect over breakfast, walk the materials library with our consultant and specify your project from inside a working reference.", amenities: ["Three ensuite suites", "Hosted materials walkthrough", "Private garden + sunken lounge", "Full breakfast & chef on request", "Sample library access", "Airport transfer on request"] },
+  { slug: "material-loft", tier: "Mid", name: "The Material Loft", location: "Jaipur, Rajasthan", price: "₹12,500", guests: 4, bedrooms: 2, hero: "photo-1737467030068-88ad20e617ca", blurb: "A warm city loft finished in our stone and oak — design comfort without the ceremony.", description: "A two-bedroom city loft for travellers who want to live with good material without the full showroom programme. Oak plank floors, honed stone counters and hand-finished lime walls — the same spec we install for clients, at an easy nightly rate.", amenities: ["Two queen bedrooms", "Full kitchen in honed stone", "Work nook with fibre wifi", "Self check-in", "Breakfast basket on request"] },
+  { slug: "courtyard-room", tier: "Budget-friendly", name: "The Courtyard Room", location: "Kishangarh, Rajasthan", price: "₹5,800", guests: 2, bedrooms: 1, hero: "photo-1576354302919-96748cb8299e", blurb: "A simple, honest room beside our workshop — stone underfoot, sun in the courtyard.", description: "Our budget-friendly stay: a quiet, light-filled room next to the Kishangarh workshop. Honest materials, a proper bed, a shaded courtyard and chai from the studio kitchen. Perfect for a night between site visits — or your first look at what we make.", amenities: ["Queen bed, ensuite bath", "Shaded shared courtyard", "Studio chai & breakfast", "Workshop viewing on request", "Self check-in"] },
+];
+
 const approach = [
   { number: "01", title: "MATERIAL FIRST", image: "photo-1618221195710-dd6b41faaea6", text: "Every project begins with the stone or the surface. Specification precedes drawings so the material never has to bend to fit the design." },
   { number: "02", title: "ONE TEAM", image: "photo-1600585154340-be6161a56a0c", text: "Materials, flooring, construction and interiors under one roof. One accountable team from the spec sheet to the snag list." },
@@ -462,7 +468,7 @@ function ExperienceSpotlight() {
         <ul data-testid="experience-spotlight-details">{livingStudio.details.map((detail, index) => <li key={detail} style={{ "--i": index }}>{detail}</li>)}</ul>
         <div className="experience-spotlight__actions">
           <Link to="/experience" className="np-btn np-btn--solid" data-testid="experience-spotlight-explore">EXPLORE THE STAY <ArrowUpRight size={16} /></Link>
-          <button type="button" className="np-btn np-btn--ghost" onClick={() => setOpen(true)} data-testid="experience-spotlight-request">REQUEST A NIGHT <ArrowUpRight size={16} /></button>
+          <Link to="/stays" className="np-btn np-btn--ghost" data-testid="experience-spotlight-request">REQUEST A NIGHT <ArrowUpRight size={16} /></Link>
         </div>
       </div>
     </div>
@@ -744,16 +750,29 @@ function CataloguePage() {
 
 function ExperiencePage() {
   usePageMeta("The BDSM Living Studio | Design Stay", "Stay inside a working BDSM · BDS Marvel home — three suites built with our own stone, floors, finishes and furniture.");
-  const { setOpen } = useContact();
   return <main className="experience-page" data-testid="experience-page">
     <section className="experience-hero" style={{ backgroundImage: `linear-gradient(160deg, rgba(10,8,6,.55), rgba(10,8,6,.32)), url(${img("photo-1600585154340-be6161a56a0c")})` }}>
       <div className="detail-kicker"><span>BDSM · LIVING STUDIO</span><Link to="/" data-testid="experience-back-link">BACK HOME</Link></div>
-      <div className="experience-hero__copy"><p className="eyebrow">B&amp;B · LIVING SHOWROOM</p><h1>Don't just see<br /><em>the material — stay in it.</em></h1><p>The BDSM Living Studio is a small guesthouse built entirely with our own materials and finishes. Book a night, explore the surfaces, and specify your project from inside a working reference.</p><button className="np-btn np-btn--paper" onClick={() => setOpen(true)} data-testid="experience-book-cta">REQUEST A NIGHT <ArrowUpRight size={16} /></button></div>
+      <div className="experience-hero__copy"><p className="eyebrow">B&amp;B · LIVING SHOWROOM</p><h1>Don't just see<br /><em>the material — stay in it.</em></h1><p>The BDSM Living Studio is a small guesthouse built entirely with our own materials and finishes. Book a night, explore the surfaces, and specify your project from inside a working reference.</p><Link to="/stays" className="np-btn np-btn--paper" data-testid="experience-book-cta">REQUEST A NIGHT <ArrowUpRight size={16} /></Link></div>
     </section>
     <section className="experience-strip">
       <div><span className="section-index">01</span><h3>The Experience</h3><p>Three suites, one shared courtyard and a materials library drawn from our own stone, flooring and furniture ranges. Stay 24 hours and the space explains itself.</p></div>
       <div><span className="section-index">02</span><h3>The Space</h3><p>1,800 sqft on a stone plinth with a shaded verandah, sunken lounge, private garden and an open kitchen. Every joint is a spec you can copy.</p></div>
       <div><span className="section-index">03</span><h3>Amenities</h3><p>Suites for two, full breakfast, resident material consultant on request, sample library, project archive and a small cinema for reference walkthroughs.</p></div>
+    </section>
+    <section className="experience-tiers" data-testid="experience-tiers">
+      <div className="experience-tiers__heading"><span className="section-index">THREE WAYS TO STAY</span><h2>Three BnBs,<br /><em>three kinds of night.</em></h2><p>From the flagship Living Studio — where you experience our work first-hand — to an easy city loft and an honest courtyard room by the workshop.</p></div>
+      <div className="experience-tiers__grid">
+        {stays.map((stay) => <Link to="/stays" className="stay-tier-card" key={stay.slug} data-testid={`experience-tier-${stay.slug}`}>
+          <div className="stay-tier-card__media"><img src={img(stay.hero, 900)} alt={stay.name} loading="lazy" /><span className="stay-tier-card__tier">{stay.tier}</span></div>
+          <div className="stay-tier-card__body">
+            <h3>{stay.name}</h3>
+            <p>{stay.blurb}</p>
+            <span className="stay-tier-card__meta">{stay.location} · from {stay.price}/night</span>
+            <span className="stay-tier-card__cta">EXPLORE &amp; BOOK <ArrowUpRight size={15} /></span>
+          </div>
+        </Link>)}
+      </div>
     </section>
     <section className="experience-gallery">
       <div className="experience-gallery__heading"><span className="section-index">02 — INSIDE</span><h2>Every surface,<br /><em>made by us.</em></h2></div>
@@ -763,8 +782,106 @@ function ExperiencePage() {
     </section>
     <section className="experience-cta">
       <div><span className="section-index">READY WHEN YOU ARE</span><h2>Book a night at<br /><em>the Living Studio.</em></h2><p>Availability is limited — we host a handful of stays each month between site visits.</p></div>
-      <button className="np-btn np-btn--solid experience-cta__btn" onClick={() => setOpen(true)} data-testid="experience-book-second">REQUEST A NIGHT <ArrowUpRight size={16} /></button>
+      <Link to="/stays" className="np-btn np-btn--solid experience-cta__btn" data-testid="experience-book-second">REQUEST A NIGHT <ArrowUpRight size={16} /></Link>
     </section>
+  </main>;
+}
+
+function BookingModal({ stay, onClose }) {
+  const [form, setForm] = useState({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
+  const [status, setStatus] = useState({ state: "idle", error: "" });
+  const firstFieldRef = useRef(null);
+  const scrollResumeRef = useRef(null);
+  const open = Boolean(stay);
+  const today = new Date().toISOString().slice(0, 10);
+
+  useEffect(() => {
+    window.clearTimeout(scrollResumeRef.current);
+    if (open) {
+      setStatus({ state: "idle", error: "" });
+      setForm({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
+      window.setTimeout(() => firstFieldRef.current?.focus(), 80);
+      document.body.style.overflow = "hidden";
+      stopSmoothScroll();
+      return () => { document.body.style.overflow = ""; };
+    }
+    document.body.style.overflow = "";
+    scrollResumeRef.current = window.setTimeout(() => startSmoothScroll(), 60);
+    return () => window.clearTimeout(scrollResumeRef.current);
+  }, [open]);
+  useEffect(() => { const onKey = (event) => { if (event.key === "Escape") onClose(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, [onClose]);
+
+  const update = (field) => (event) => setForm((prev) => ({ ...prev, [field]: event.target.value }));
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (form.checkOut && form.checkIn && form.checkOut <= form.checkIn) {
+      setStatus({ state: "error", error: "Check-out must be after check-in." });
+      return;
+    }
+    setStatus({ state: "sending", error: "" });
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/bookings`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stay: stay.name, name: form.name.trim(), email: form.email.trim(), check_in: form.checkIn, check_out: form.checkOut, guests: Number(form.guests), message: form.message.trim() || null }) });
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail?.detail?.[0]?.msg || "Please double-check your details and try again.");
+      }
+      setStatus({ state: "sent", error: "" });
+    } catch (error) {
+      setStatus({ state: "error", error: error.message || "Something went wrong. Please try again." });
+    }
+  };
+
+  if (!open) return null;
+  return <div className="contact-modal" role="dialog" aria-modal="true" aria-label="Book a stay" data-testid="booking-modal">
+    <button className="contact-modal__scrim" onClick={onClose} aria-label="Close" data-testid="booking-modal-scrim" />
+    <div className="contact-modal__panel">
+      <button className="contact-modal__close" onClick={onClose} aria-label="Close" data-testid="booking-modal-close"><X size={22} /></button>
+      <div className="contact-modal__intro">
+        <span className="section-index">BOOK A STAY · {stay.tier.toUpperCase()}</span>
+        <h2>{stay.name}</h2>
+        <p>{stay.location} · from {stay.price}/night · sleeps {stay.guests}. Send your dates — we confirm availability within one working day.</p>
+        <div className="contact-modal__meta"><span>info.bdsmarvel@gmail.com</span><span>{stay.location}</span></div>
+      </div>
+      {status.state === "sent" ? <div className="contact-modal__success" data-testid="booking-modal-success"><Check size={40} /><h3>Request received.</h3><p>Thanks — we'll confirm availability for {stay.name} within one working day and hold your dates in the meantime.</p><button onClick={onClose} data-testid="booking-modal-done">CLOSE</button></div> : <form className="contact-modal__form" onSubmit={submit} data-testid="booking-modal-form" noValidate>
+        <label className="cm-field"><span>Your name</span><input ref={firstFieldRef} required value={form.name} onChange={update("name")} placeholder="Riya Kapoor" data-testid="booking-name-input" /></label>
+        <label className="cm-field"><span>Email</span><input required type="email" value={form.email} onChange={update("email")} placeholder="you@email.com" data-testid="booking-email-input" /></label>
+        <label className="cm-field"><span>Check-in</span><input required type="date" min={today} value={form.checkIn} onChange={update("checkIn")} data-testid="booking-checkin-input" /></label>
+        <label className="cm-field"><span>Check-out</span><input required type="date" min={form.checkIn || today} value={form.checkOut} onChange={update("checkOut")} data-testid="booking-checkout-input" /></label>
+        <label className="cm-field cm-field--full"><span>Guests</span><select value={form.guests} onChange={update("guests")} data-testid="booking-guests-select">{Array.from({ length: stay.guests }, (_, i) => i + 1).map((count) => <option key={count} value={count}>{count} {count === 1 ? "guest" : "guests"}</option>)}</select></label>
+        <label className="cm-field cm-field--full"><span>Anything we should know? (optional)</span><textarea rows={3} value={form.message} onChange={update("message")} placeholder="Arrival time, occasions, material walkthrough requests…" data-testid="booking-message-input" /></label>
+        {status.state === "error" && <div className="cm-error" data-testid="booking-modal-error">{status.error}</div>}
+        <button type="submit" className="cm-submit" disabled={status.state === "sending"} data-testid="booking-modal-submit">{status.state === "sending" ? <><Loader2 size={16} className="cm-spin" /> Sending…</> : <>REQUEST BOOKING <ArrowUpRight size={16} /></>}</button>
+      </form>}
+    </div>
+  </div>;
+}
+
+function StaysPage() {
+  usePageMeta("Stays & BnBs | BDSM · BDS Marvel", "Explore BDSM · BDS Marvel stays — the premium Living Studio, the Material Loft and the budget-friendly Courtyard Room. Book a night directly.");
+  const [booking, setBooking] = useState(null);
+  return <main className="stays-page" data-testid="stays-page">
+    <section className="stays-hero">
+      <div className="detail-kicker"><span>BDSM · STAYS</span><Link to="/experience" data-testid="stays-back-link">THE LIVING STUDIO</Link></div>
+      <div className="stays-hero__copy"><p className="eyebrow">AIR BNB · THREE CATEGORIES</p><h1>Explore our BnBs.<br /><em>Book your night.</em></h1><p>Three ways to stay with BDS Marvel — the premium Living Studio where you experience our work first-hand, the mid-range Material Loft, and the budget-friendly Courtyard Room. Pick one, send your dates, and we confirm within one working day.</p></div>
+    </section>
+    <section className="stays-list" data-testid="stays-list">
+      {stays.map((stay, index) => <article className={`stay-card ${index % 2 === 1 ? "stay-card--flip" : ""}`} key={stay.slug} data-testid={`stay-card-${stay.slug}`}>
+        <div className="stay-card__media"><img src={img(stay.hero, 1200)} alt={stay.name} loading="lazy" /><span className="stay-card__tier" data-testid={`stay-tier-${stay.slug}`}>{stay.tier}</span></div>
+        <div className="stay-card__body">
+          <span className="section-index">{String(index + 1).padStart(2, "0")} — {stay.tier.toUpperCase()}</span>
+          <h2>{stay.name}</h2>
+          <p className="stay-card__location">{stay.location} · {stay.bedrooms} {stay.bedrooms === 1 ? "bedroom" : "bedrooms"} · sleeps {stay.guests}</p>
+          <p className="stay-card__description">{stay.description}</p>
+          <ul className="stay-card__amenities">{stay.amenities.map((amenity) => <li key={amenity}>{amenity}</li>)}</ul>
+          <div className="stay-card__footer">
+            <span className="stay-card__price" data-testid={`stay-price-${stay.slug}`}>from <strong>{stay.price}</strong> / night</span>
+            <button type="button" className="np-btn np-btn--solid" onClick={() => setBooking(stay)} data-testid={`stay-book-${stay.slug}`}>BOOK THIS STAY <ArrowUpRight size={16} /></button>
+          </div>
+        </div>
+      </article>)}
+    </section>
+    <BookingModal stay={booking} onClose={() => setBooking(null)} />
   </main>;
 }
 
@@ -961,6 +1078,7 @@ function App() {
           <Route path="/businesses/:slug" element={<SegmentPage />} />
           <Route path="/catalogue" element={<CataloguePage />} />
           <Route path="/experience" element={<ExperiencePage />} />
+          <Route path="/stays" element={<StaysPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/work" element={<ProjectsArchive />} />
           <Route path="/work/:slug" element={<ProjectPage />} />

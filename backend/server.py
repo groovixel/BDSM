@@ -246,6 +246,87 @@ async def list_inquiries(limit: int = 50):
             row['created_at'] = datetime.fromisoformat(row['created_at'])
     return rows
 
+
+# --- Stay bookings (Air BnB booking requests) ---
+
+class BookingCreate(BaseModel):
+    stay: str = Field(min_length=1, max_length=120)
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    check_in: str
+    check_out: str
+    guests: int = Field(ge=1, le=16)
+    message: Optional[str] = Field(default=None, max_length=1000)
+
+
+class Booking(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    stay: str
+    name: str
+    email: str
+    check_in: str
+    check_out: str
+    guests: int
+    message: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+def _booking_email_html(bk: "Booking") -> str:
+    def row(label, value):
+        return (f'<tr><td style="padding:8px 16px 8px 0;color:#8a8577;font-size:11px;'
+                f'letter-spacing:2px;text-transform:uppercase;vertical-align:top">{label}</td>'
+                f'<td style="padding:8px 0;font-size:14px;color:#141414">{value}</td></tr>')
+    rows = row("Stay", escape(bk.stay))
+    rows += row("Dates", f'{escape(bk.check_in)} &rarr; {escape(bk.check_out)}')
+    rows += row("Guests", str(bk.guests))
+    rows += row("Name", escape(bk.name))
+    rows += row("Email", f'<a href="mailto:{escape(bk.email)}" style="color:#141414">{escape(bk.email)}</a>')
+    if bk.message:
+        rows += row("Notes", escape(bk.message).replace("\n", "<br />"))
+    return ('<table role="presentation" width="100%" style="background:#f5f2ea;padding:32px 0">'
+            '<tr><td align="center"><table role="presentation" width="560" '
+            'style="background:#ffffff;padding:32px;font-family:Arial,sans-serif">'
+            '<tr><td><p style="font-size:11px;letter-spacing:3px;color:#8a8577;margin:0 0 8px">BDS MARVEL &middot; STAY BOOKING</p>'
+            '<h1 style="font-size:22px;margin:0 0 24px;color:#141414">New booking request</h1>'
+            f'<table role="presentation" width="100%">{rows}</table>'
+            f'<p style="font-size:12px;color:#8a8577;margin:24px 0 0">Sent by the {escape(EMAIL_FROM_NAME)} website stays page. We never ask for passwords or card details by email.</p>'
+            '</td></tr></table></td></tr></table>')
+
+
+@api_router.post("/bookings", response_model=Booking, status_code=201)
+async def create_booking(payload: BookingCreate):
+    try:
+        check_in = datetime.strptime(payload.check_in, "%Y-%m-%d").date()
+        check_out = datetime.strptime(payload.check_out, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Dates must be YYYY-MM-DD")
+    if check_out <= check_in:
+        raise HTTPException(status_code=422, detail="Check-out must be after check-in")
+    booking = Booking(**payload.model_dump())
+    doc = booking.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.bookings.insert_one(doc)
+    logger.info("New booking request for %s from %s <%s>", booking.stay, booking.name, booking.email)
+    try:
+        await send_email(to=OWNER_EMAIL, subject=f"New stay booking - {booking.stay}",
+                         html=_booking_email_html(booking))
+        logger.info("Booking notification emailed to %s", OWNER_EMAIL)
+    except Exception as exc:
+        logger.error("Booking saved but email notification failed: %s", exc)
+    return booking
+
+
+@api_router.get("/bookings", response_model=List[Booking])
+async def list_bookings(limit: int = 50):
+    limit = max(1, min(limit, 200))
+    rows = await db.bookings.find({}, {"_id": 0}).sort("created_at", -1).to_list(limit)
+    for row in rows:
+        if isinstance(row.get('created_at'), str):
+            row['created_at'] = datetime.fromisoformat(row['created_at'])
+    return rows
+
 # Include the router in the main app
 app.include_router(api_router)
 

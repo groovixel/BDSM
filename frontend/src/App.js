@@ -227,7 +227,7 @@ function Header() {
         <Link to="/experience" onClick={() => setMenuOpen(false)} data-testid="nav-experience-link"><span>06</span>AIR BNB</Link>
         <Link to="/contact" onClick={() => setMenuOpen(false)} data-testid="nav-contact-link"><span>07</span>CONTACT</Link>
       </nav>
-      <div className="drawer-footer" data-testid="navigation-drawer-footer">INFO.BDSMARVEL@GMAIL.COM <span>© BDSM · BDS MARVEL</span></div>
+      <div className="drawer-footer" data-testid="navigation-drawer-footer">INFO@BDSMARVEL.COM <span>© BDSM · BDS MARVEL</span></div>
     </div>
   </>;
 }
@@ -653,7 +653,7 @@ function ContactModal() {
         <span className="section-index">START A PROJECT</span>
         <h2>Let's build<br /><em>something together.</em></h2>
         <p>Tell us about your project — stone, flooring, construction or interiors. One team handles all of it, and we reply within one working day.</p>
-        <div className="contact-modal__meta"><span>info.bdsmarvel@gmail.com</span><span>Mumbai · Kishangarh · Gurugram</span></div>
+        <div className="contact-modal__meta"><span>info@bdsmarvel.com</span><span>Mumbai · Kishangarh · Gurugram</span></div>
       </div>
       {status.state === "sent" ? <div className="contact-modal__success" data-testid="contact-modal-success"><Check size={40} /><h3>Thanks — we've got it.</h3><p>The team will be in touch shortly. In the meantime, feel free to explore the projects and catalogue.</p><button onClick={() => setOpen(false)} data-testid="contact-modal-done">CLOSE</button></div> : <form className="contact-modal__form" onSubmit={submit} data-testid="contact-modal-form" noValidate>
         <label className="cm-field"><span>Your name</span><input ref={firstFieldRef} required value={form.name} onChange={update("name")} placeholder="Riya Kapoor" data-testid="contact-name-input" /></label>
@@ -892,7 +892,7 @@ function BookingModal({ stay, onClose }) {
         <span className="section-index">BOOK A STAY</span>
         <h2>{stay.name}</h2>
         <p>{stay.location} · from {stay.price}/night · sleeps {stay.guests}. Send your dates — we confirm availability within one working day.</p>
-        <div className="contact-modal__meta"><span>info.bdsmarvel@gmail.com</span><span>{stay.location}</span></div>
+        <div className="contact-modal__meta"><span>info@bdsmarvel.com</span><span>{stay.location}</span></div>
       </div>
       {status.state === "sent" ? <div className="contact-modal__success" data-testid="booking-modal-success"><Check size={40} /><h3>Request received.</h3><p>Thanks — we'll confirm availability for {stay.name} within one working day and hold your dates in the meantime.</p><button onClick={onClose} data-testid="booking-modal-done">CLOSE</button></div> : <form className="contact-modal__form" onSubmit={submit} data-testid="booking-modal-form" noValidate>
         <label className="cm-field"><span>Your name</span><input ref={firstFieldRef} required value={form.name} onChange={update("name")} placeholder="Riya Kapoor" data-testid="booking-name-input" /></label>
@@ -995,8 +995,8 @@ function ContactPage() {
           <ChevronRight size={18} />
         </button>)}
         <div className="contact-page__info">
-          <a href="mailto:info.bdsmarvel@gmail.com" data-testid="press-email">info.bdsmarvel@gmail.com</a>
-          <a href="mailto:info.bdsmarvel@gmail.com" data-testid="bd-email">info.bdsmarvel@gmail.com</a>
+          <a href="mailto:info@bdsmarvel.com" data-testid="press-email">info@bdsmarvel.com</a>
+          <a href="mailto:info@bdsmarvel.com" data-testid="bd-email">info@bdsmarvel.com</a>
           <p>Phone : <a href="tel:+911140000000" data-testid="contact-phone">+91 11 4000 0000</a></p>
           <div className="contact-page__socials">
             <a href="https://www.instagram.com/bdsm.co" target="_blank" rel="noreferrer" aria-label="Instagram" data-testid="social-instagram"><Instagram size={18} /></a>

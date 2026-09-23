@@ -343,6 +343,40 @@ function ProjectsSlideshow() {
   </section>;
 }
 
+function CountUp({ value }) {
+  const ref = useRef(null);
+  const [display, setDisplay] = useState(value);
+  useEffect(() => {
+    const node = ref.current;
+    const match = value.match(/^(\d+)(.*)$/);
+    if (!node || !match) return undefined;
+    const target = parseInt(match[1], 10);
+    const suffix = match[2];
+    const pad = match[1].length;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const render = (n) => setDisplay(String(n).padStart(pad, "0") + suffix);
+    let raf = null;
+    const animate = () => {
+      if (reduced) { render(target); return; }
+      const start = performance.now();
+      const duration = 1400;
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        render(Math.round((1 - Math.pow(1 - t, 3)) * target));
+        if (t < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (raf) cancelAnimationFrame(raf);
+      if (entry.isIntersecting) { render(0); animate(); } else render(0);
+    }, { threshold: 0.4 });
+    observer.observe(node);
+    return () => { observer.disconnect(); if (raf) cancelAnimationFrame(raf); };
+  }, [value]);
+  return <strong ref={ref}>{display}</strong>;
+}
+
 function BdsmMark() {
   const tiles = ["tl","d","tr","tl","d","tr","tl","d","tr","tl","d","tr","tl","d","tr","tl","d","tr","tl","d","tr","tl","d","tr"];
   return <div className="zm-mark" aria-hidden="true">{tiles.map((t, i) => <span key={i} className={`zm-tile zm-tile--${t}`} />)}</div>;
@@ -1086,10 +1120,10 @@ function AboutPage() {
     </section>
 
     <section className="about-strip">
-      <div className="about-strip__stat"><strong>20+</strong><span>years of building</span></div>
-      <div className="about-strip__stat"><strong>04</strong><span>in-house divisions</span></div>
-      <div className="about-strip__stat"><strong>05</strong><span>cities operated from</span></div>
-      <div className="about-strip__stat"><strong>200+</strong><span>projects delivered</span></div>
+      <div className="about-strip__stat"><CountUp value="20+" /><span>years of building</span></div>
+      <div className="about-strip__stat"><CountUp value="04" /><span>in-house divisions</span></div>
+      <div className="about-strip__stat"><CountUp value="05" /><span>cities operated from</span></div>
+      <div className="about-strip__stat"><CountUp value="200+" /><span>projects delivered</span></div>
     </section>
 
     <section className="about-principles">

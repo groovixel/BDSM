@@ -19,7 +19,7 @@
 - Business rail: all active and inactive ordered-list text, numbering, underlines, and caret render black across desktop and mobile
 - Client showcase: a compact, borderless two-row monochrome logo marquee sits directly below the homepage hero; all twenty self-contained typographic marks loop automatically at a calm 38/42-second pace, with rows moving in opposite directions and pausing on hover or reduced-motion preference
 - Client showcase label: the eyebrow copy is exactly `Clientle`
-- Mobile purpose accordion: at widths up to 800px, the five “How BDSM Builds” items open one at a time directly beneath their clicked button in normal document flow, using height/fade/slide motion; desktop retains the original split list-and-feature layout
+- Mobile purpose accordion: at widths up to 800px, the five “How BDS Marvel Builds” items open one at a time directly beneath their clicked button in normal document flow, using height/fade/slide motion; desktop retains the original split list-and-feature layout
 - Desktop purpose transition: changing a purpose by tab or arrow replays a subtle 24px right-to-left fade/slide on the feature panel, with reduced-motion support
 - Purpose highlight palette: item 04 reuses the Interiors article mushroom `#b8a394`; item 05 reuses the standalone Air BnB olive-stone `#b9b49a`; items 01–03 retain their original colors
 - Header wordmark: the visible mark is plain `BDSM` with no registered-symbol suffix

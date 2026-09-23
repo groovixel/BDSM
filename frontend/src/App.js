@@ -233,7 +233,7 @@ function Home() {
     <NetworkExperience />
     <ExperienceSpotlight />
     <section className="purpose-section" id="purpose" data-testid="purpose-section">
-      <Reveal className="purpose-header"><span className="section-index">02 — HOW BDSM BUILDS</span><h2>Built around<br /><em>the material.</em></h2></Reveal>
+      <Reveal className="purpose-header"><span className="section-index">02 — HOW BDS MARVEL BUILDS</span><h2>Built around<br /><em>the material.</em></h2></Reveal>
       <div className="purpose-layout">
         <div className="purpose-list">{approach.map((purpose, index) => <div className={`purpose-accordion-item ${activeApproach === index ? "purpose-accordion-item--active" : ""}`} key={purpose.title} data-testid={`purpose-accordion-item-${index + 1}`}>
           <button className={`purpose-tab purpose-tab--tone-${purposeTones[index % 4]} ${activeApproach === index ? "purpose-tab--active" : ""}`} onClick={() => setActiveApproach(index)} aria-expanded={activeApproach === index} aria-controls={`purpose-mobile-panel-${index + 1}`} data-testid={`purpose-tab-${index + 1}`}><span>{purpose.number}</span><strong>{purpose.title}</strong><ChevronDown size={19} /></button>

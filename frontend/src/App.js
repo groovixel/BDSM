@@ -492,7 +492,7 @@ function ExperienceSpotlight() {
   }, []);
   return <section className={`experience-spotlight ${revealed ? "experience-spotlight--revealed" : ""}`} data-testid="experience-spotlight">
     <div className="experience-spotlight__header">
-      <span className="section-index" data-testid="experience-spotlight-label">LIVE WITH OUR WORK</span>
+      <span className="section-index" data-testid="experience-spotlight-label">EXPERIENCE OUR CRAFT</span>
       <p data-testid="experience-spotlight-status">A stayable home by BDSM · BDS Marvel</p>
     </div>
     <div className="experience-spotlight__layout">

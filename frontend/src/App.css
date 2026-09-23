@@ -125,6 +125,7 @@
 .network-panel--bronze{background:#c9a888}
 .network-panel--charcoal{background:#c8c1b3}
 .network-panel--terracotta{background:#b8a394}
+.network-panel--sage{background:#a9b39b}
 .network-panel--coral{background:#b9b49a}
 .network-panel--yellow{background:#c9a888}
 .network-panel--pink{background:#d9a48a}
@@ -551,6 +552,7 @@ html.lenis,html.lenis body{height:auto}
 .case-study-page--bronze{--cs-tone:#c9a888}
 .case-study-page--charcoal{--cs-tone:#c8c1b3}
 .case-study-page--terracotta{--cs-tone:#d9a48a}
+.case-study-page--sage{--cs-tone:#a9b39b}
 .case-study-page--coral{--cs-tone:#e5d8c1}
 
 .case-study-hero{padding:60px 7vw 90px;background:#0a0a0a;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:44px 60px;align-items:end}

@@ -996,7 +996,7 @@ function ContactPage() {
         </button>)}
         <div className="contact-page__info">
           <a href="mailto:info@bdsmarvel.com" data-testid="press-email">info@bdsmarvel.com</a>
-          <a href="mailto:info@bdsmarvel.com" data-testid="bd-email">info@bdsmarvel.com</a>
+          <a href="mailto:info.bdsmarvel@gmail.com" data-testid="bd-email">info.bdsmarvel@gmail.com</a>
           <p>Phone : <a href="tel:+911140000000" data-testid="contact-phone">+91 11 4000 0000</a></p>
           <div className="contact-page__socials">
             <a href="https://www.instagram.com/bdsm.co" target="_blank" rel="noreferrer" aria-label="Instagram" data-testid="social-instagram"><Instagram size={18} /></a>

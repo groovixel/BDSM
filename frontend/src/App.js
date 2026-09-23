@@ -778,11 +778,6 @@ function ExperiencePage() {
       <div className="detail-kicker"><span>BDSM · LIVING STUDIO</span><Link to="/" data-testid="experience-back-link">BACK HOME</Link></div>
       <div className="experience-hero__copy"><p className="eyebrow">B&amp;B · LIVING SHOWROOM</p><h1>Don't just see<br /><em>the material — stay in it.</em></h1><p>The BDSM Living Studio is a small guesthouse built entirely with our own materials and finishes. Book a night, explore the surfaces, and specify your project from inside a working reference.</p><Link to="/stays" className="np-btn np-btn--paper" data-testid="experience-book-cta">REQUEST A NIGHT <ArrowUpRight size={16} /></Link></div>
     </section>
-    <section className="experience-strip">
-      <div><span className="section-index">01</span><h3>The Experience</h3><p>Three suites, one shared courtyard and a materials library drawn from our own stone, flooring and furniture ranges. Stay 24 hours and the space explains itself.</p></div>
-      <div><span className="section-index">02</span><h3>The Space</h3><p>1,800 sqft on a stone plinth with a shaded verandah, sunken lounge, private garden and an open kitchen. Every joint is a spec you can copy.</p></div>
-      <div><span className="section-index">03</span><h3>Amenities</h3><p>Suites for two, full breakfast, resident material consultant on request, sample library, project archive and a small cinema for reference walkthroughs.</p></div>
-    </section>
     <section className="experience-tiers" data-testid="experience-tiers">
       <div className="experience-tiers__heading"><span className="section-index">THREE WAYS TO STAY</span><h2>Three BnBs,<br /><em>three kinds of night.</em></h2><p>From the flagship Living Studio — where you experience our work first-hand — to an easy city loft and an honest courtyard room by the workshop.</p></div>
       <div className="experience-tiers__grid">

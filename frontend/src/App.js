@@ -118,11 +118,17 @@ const catalogueItems = [
   { slug: "decorative-vessel", name: "Turned Stone Vessel", material: "Stone", product: "Decorative", application: "Interior", image: "photo-1618221195710-dd6b41faaea6", origin: "BDS workshop" },
   { slug: "custom-vanity", name: "Custom Marble Vanity", material: "Marble", product: "Furniture", application: "Residential", image: "photo-1600566753190-17f0baa2a6c3", origin: "BDS workshop" },
   { slug: "onyx-lamp", name: "Backlit Onyx Panel", material: "Onyx", product: "Decorative", application: "Commercial", image: "photo-1503387762-592deb58ef4e", origin: "BDS workshop" },
+  { slug: "terrazzo-slab", name: "Cast Terrazzo Slab", material: "Terrazzo", product: "Slab", application: "Commercial", image: "photo-1618220179428-22790b461013", origin: "BDS workshop" },
+  { slug: "lime-plaster", name: "Hand-trowelled Lime Finish", material: "Lime", product: "Finish", application: "Interior", image: "photo-1780399334790-64af9ffb45fc", origin: "In-house crew" },
+  { slug: "oak-headboard", name: "Oak Suite Headboard", material: "Wood", product: "Furniture", application: "Stay", image: "photo-1737467030068-88ad20e617ca", origin: "BDS workshop" },
+  { slug: "onyx-sconce", name: "Backlit Onyx Sconce", material: "Onyx", product: "Lighting", application: "Hospitality", image: "photo-1747258818911-dfde27ecabba", origin: "BDS workshop" },
+  { slug: "stone-basin-suite", name: "Stone Basin — Suite", material: "Stone", product: "Furniture", application: "Stay", image: "photo-1576354302919-96748cb8299e", origin: "In-house workshop" },
+  { slug: "oak-stay-floor", name: "Oak Plank — Suite Floor", material: "Flooring", product: "Flooring", application: "Stay", image: "photo-1789381500057-2a288d79e9e6", origin: "Proprietary line" },
 ];
 
-const materialsFilter = ["All", "Marble", "Stone", "Onyx", "Travertine", "Flooring"];
-const productsFilter = ["All", "Slab", "Facade", "Fountain", "Table", "Furniture", "Decorative", "Flooring"];
-const applicationsFilter = ["All", "Interior", "Exterior", "Residential", "Commercial", "Hospitality"];
+const materialsFilter = ["All", "Marble", "Stone", "Onyx", "Travertine", "Terrazzo", "Wood", "Lime", "Flooring"];
+const productsFilter = ["All", "Slab", "Facade", "Fountain", "Table", "Furniture", "Lighting", "Decorative", "Finish", "Flooring"];
+const applicationsFilter = ["All", "Interior", "Exterior", "Residential", "Commercial", "Hospitality", "Stay"];
 
 function useReveal() {
   const ref = useRef(null);

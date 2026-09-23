@@ -293,19 +293,30 @@ function Home() {
 function ProjectsSlideshow() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const touchStartX = useRef(null);
   useEffect(() => {
     if (paused) return undefined;
     const id = setInterval(() => setActive((index) => (index + 1) % projects.length), 5000);
     return () => clearInterval(id);
   }, [paused]);
   const project = projects[active];
+  const showNext = () => setActive((index) => (index + 1) % projects.length);
+  const showPrev = () => setActive((index) => (index + projects.length - 1) % projects.length);
+  const onTouchStart = (event) => { touchStartX.current = event.touches[0].clientX; };
+  const onTouchEnd = (event) => {
+    if (touchStartX.current == null) return;
+    const delta = event.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 40) return;
+    if (delta < 0) showNext(); else showPrev();
+  };
   return <section className="work-slideshow" id="work" data-testid="work-slideshow" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
     <Reveal className="work-slideshow__head">
       <span className="section-index">03 — PROJECT CATALOGUE</span>
       <h2>Selected work,<br /><em>frame by frame.</em></h2>
       <Link to="/projects" className="work-slideshow__all" data-testid="work-slideshow-all">ALL PROJECTS <ArrowUpRight size={15} /></Link>
     </Reveal>
-    <div className="work-slideshow__stage">
+    <div className="work-slideshow__stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} data-testid="work-slideshow-stage">
       <Link to={`/projects/${project.slug}`} key={project.slug} className="work-slideshow__frame" data-testid="work-slideshow-frame">
         <img src={img(project.image, 1600)} alt={project.title} />
         <span className="work-slideshow__meta">{project.category} · {project.location}</span>
@@ -317,8 +328,8 @@ function ProjectsSlideshow() {
           <span className="work-slideshow__segment">{project.segment}</span>
         </div>
         <div className="work-slideshow__arrows">
-          <button type="button" onClick={() => setActive((active + projects.length - 1) % projects.length)} aria-label="Previous project" data-testid="work-slideshow-prev"><ChevronLeft size={20} /></button>
-          <button type="button" onClick={() => setActive((active + 1) % projects.length)} aria-label="Next project" data-testid="work-slideshow-next"><ChevronRight size={20} /></button>
+          <button type="button" onClick={showPrev} aria-label="Previous project" data-testid="work-slideshow-prev"><ChevronLeft size={20} /></button>
+          <button type="button" onClick={showNext} aria-label="Next project" data-testid="work-slideshow-next"><ChevronRight size={20} /></button>
         </div>
       </div>
       <div className="work-slideshow__dots">{projects.map((item, index) => <button type="button" key={item.slug} className={index === active ? "is-active" : ""} onClick={() => setActive(index)} aria-label={`Show ${item.title}`} data-testid={`work-slideshow-dot-${index + 1}`} />)}</div>

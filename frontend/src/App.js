@@ -941,7 +941,7 @@ function SegmentPage() {
     <section className="detail-content">
       <div className="detail-intro"><span className="section-index">01 — POINT OF VIEW</span><h2>{segment.tagline}</h2></div>
       <div className="detail-columns">
-        <div><span className="section-index">CAPABILITIES</span><ul className="service-list">{segment.services.map((service, index) => <li key={service}><span>0{index + 1}</span>{service}<ArrowUpRight size={15} /></li>)}</ul></div>
+        <div><span className="section-index">CAPABILITIES</span><ul className="service-list">{segment.services.map((service, index) => <li key={service} onClick={() => openConsult(extra?.consultService || "")} data-testid={`capability-item-${index + 1}`}><span>0{index + 1}</span>{service}<ArrowUpRight size={15} /></li>)}</ul></div>
         <div><span className="section-index">THE TEAM</span><ul className="team-list">{segment.team.map((person) => <li key={person}>{person}</li>)}</ul></div>
       </div>
     </section>

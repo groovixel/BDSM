@@ -127,6 +127,46 @@ const catalogueItems = [
   { slug: "oak-stay-floor", name: "Oak Plank — Suite Floor", material: "Flooring", product: "Flooring", application: "Stay", image: "photo-1789381500057-2a288d79e9e6", origin: "Proprietary line" },
 ];
 
+// Extended detail content for catalogue items and per-service catalogue cards, keyed by slug.
+const catalogueDetails = {
+  "beige-honed": { consult: "Marble & Stone Consulting", desc: "A warm neutral marble honed to a soft, chalky matte — quiet veining and a tight grain that sit calmly under natural light.", specs: [["Finish", "Honed, matte"], ["Thickness", "18 – 20 mm"], ["Lead time", "2 – 3 weeks"]], gallery: ["photo-1618220179428-22790b461013", "photo-1600607687939-ce8a6c25118c", "photo-1600585154340-be6161a56a0c"] },
+  "kota-flame": { consult: "Marble & Stone Consulting", desc: "Flame-textured kota stone cut for facades that weather gracefully — cool in the heat, grippy in the rain.", specs: [["Finish", "Flamed"], ["Sizes", "Cut to project"], ["Lead time", "3 – 4 weeks"]], gallery: ["photo-1503387762-592deb58ef4e", "photo-1580587771525-78b9dba3b914", "photo-1600585154340-be6161a56a0c"] },
+  "onyx-book": { consult: "Marble & Stone Consulting", desc: "Translucent onyx book-matched into mirrored panels — a feature wall that glows the moment it's backlit.", specs: [["Finish", "Polished"], ["Matching", "Book-matched pairs"], ["Lead time", "On selection"]], gallery: ["photo-1747258818911-dfde27ecabba", "photo-1618221195710-dd6b41faaea6", "photo-1600607687939-ce8a6c25118c"] },
+  "travertine-bar": { consult: "Marble & Stone Consulting", desc: "A solid travertine block honed into a bar counter — open pores filled and sealed for daily service.", specs: [["Finish", "Honed & filled"], ["Build", "Solid block"], ["Lead time", "4 – 6 weeks"]], gallery: ["photo-1600585154340-be6161a56a0c", "photo-1600566753190-17f0baa2a6c3", "photo-1503387762-592deb58ef4e"] },
+  "stone-fountain": { consult: "Marble & Stone Consulting", desc: "A cascading garden fountain carved in-house — water worked over rough-hewn and honed faces.", specs: [["Build", "Hand-carved"], ["Setting", "Outdoor rated"], ["Lead time", "6 – 8 weeks"]], gallery: ["photo-1580587771525-78b9dba3b914", "photo-1600585154340-be6161a56a0c", "photo-1576354302919-96748cb8299e"] },
+  "marble-fountain": { consult: "Marble & Stone Consulting", desc: "A quiet basin fountain in pale marble for courtyards and entrance courts — the sound of water on stone.", specs: [["Build", "Hand-carved"], ["Setting", "Indoor / courtyard"], ["Lead time", "6 – 8 weeks"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1600607687939-ce8a6c25118c", "photo-1600566753190-17f0baa2a6c3"] },
+  "spc-contract": { consult: "Flooring Consulting", desc: "Our proprietary SPC plank built for contract traffic — rigid core, quiet underlay, hospital-grade wear layer.", specs: [["Wear layer", "0.55 mm"], ["Core", "Rigid SPC"], ["Lead time", "Ex-stock, NCR"]], gallery: ["photo-1618220179428-22790b461013", "photo-1789381500057-2a288d79e9e6", "photo-1600566753190-17f0baa2a6c3"] },
+  "oak-hospitality": { consult: "Flooring Consulting", desc: "Engineered oak plank specified for hotel corridors and suites — brushed, matte-lacquered and quiet underfoot.", specs: [["Species", "European oak"], ["Finish", "Brushed, matte"], ["Lead time", "2 – 4 weeks"]], gallery: ["photo-1600607687939-ce8a6c25118c", "photo-1616486338812-3dadae4b4ace", "photo-1789381500057-2a288d79e9e6"] },
+  "console-table": { consult: "Furniture Consulting", desc: "A Nero marble console with a honed top and mitred waterfall edge — built start to finish in the BDS workshop.", specs: [["Material", "Nero marble"], ["Build", "Mitred slab"], ["Lead time", "4 – 6 weeks"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1631396326646-c06a935ff3a6", "photo-1600607687939-ce8a6c25118c"] },
+  "decorative-vessel": { consult: "Marble & Stone Consulting", desc: "Hand-turned stone vessels in small batches — each piece follows the block it was cut from.", specs: [["Build", "Hand-turned"], ["Sizes", "120 – 420 mm"], ["Lead time", "Small batch"]], gallery: ["photo-1580587771525-78b9dba3b914", "photo-1747258818911-dfde27ecabba", "photo-1600585154340-be6161a56a0c"] },
+  "custom-vanity": { consult: "Marble & Stone Consulting", desc: "A floating marble vanity cut to your bathroom plan — integrated basin, sealed for daily use.", specs: [["Build", "Made to plan"], ["Finish", "Honed, sealed"], ["Lead time", "5 – 7 weeks"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1576354302919-96748cb8299e", "photo-1600607687939-ce8a6c25118c"] },
+  "onyx-lamp": { consult: "Interior Décor Consulting", desc: "A backlit onyx panel that turns a slab into a light source — dimmable warm LED behind matched faces.", specs: [["Light", "2700K, dimmable"], ["Matching", "Book-matched"], ["Lead time", "On selection"]], gallery: ["photo-1747258818911-dfde27ecabba", "photo-1618221195710-dd6b41faaea6", "photo-1600566753190-17f0baa2a6c3"] },
+  "terrazzo-slab": { consult: "Marble & Stone Consulting", desc: "Cast terrazzo with marble aggregate from our own cutting floor — polished to a soft, even sheen.", specs: [["Aggregate", "Marble chip"], ["Finish", "Polished"], ["Lead time", "3 – 5 weeks"]], gallery: ["photo-1618220179428-22790b461013", "photo-1503387762-592deb58ef4e", "photo-1600585154340-be6161a56a0c"] },
+  "lime-plaster": { consult: "Interior Décor Consulting", desc: "Hand-trowelled lime finish applied by our in-house crew — breathable, mineral and softly variegated.", specs: [["Coats", "2 – 3, hand-trowelled"], ["Base", "Mineral"], ["Lead time", "Per site schedule"]], gallery: ["photo-1780399334790-64af9ffb45fc", "photo-1600566753190-17f0baa2a6c3", "photo-1600607687939-ce8a6c25118c"] },
+  "oak-headboard": { consult: "Furniture Consulting", desc: "A full-width oak headboard from the Living Studio suites — solid staves with a natural oil finish.", specs: [["Species", "Solid oak"], ["Finish", "Natural oil"], ["Lead time", "4 – 6 weeks"]], gallery: ["photo-1631396326646-c06a935ff3a6", "photo-1600607687939-ce8a6c25118c", "photo-1737467030068-88ad20e617ca"] },
+  "onyx-sconce": { consult: "Interior Décor Consulting", desc: "A wall sconce in backlit onyx — a warm, low glow for corridors, suites and bars.", specs: [["Light", "2700K, dimmable"], ["Mount", "Wall"], ["Lead time", "3 – 5 weeks"]], gallery: ["photo-1747258818911-dfde27ecabba", "photo-1618221195710-dd6b41faaea6", "photo-1600566753190-17f0baa2a6c3"] },
+  "stone-basin-suite": { consult: "Marble & Stone Consulting", desc: "The carved stone basin from our suite bathrooms — one block, honed inside, split-face outside.", specs: [["Build", "Solid block"], ["Finish", "Honed / split-face"], ["Lead time", "5 – 7 weeks"]], gallery: ["photo-1580587771525-78b9dba3b914", "photo-1618221195710-dd6b41faaea6", "photo-1600585154340-be6161a56a0c"] },
+  "oak-stay-floor": { consult: "Flooring Consulting", desc: "The wide oak plank laid through the Living Studio suites — the same floor we specify for clients.", specs: [["Species", "Engineered oak"], ["Width", "220 mm"], ["Lead time", "2 – 4 weeks"]], gallery: ["photo-1616486338812-3dadae4b4ace", "photo-1600607687939-ce8a6c25118c", "photo-1789381500057-2a288d79e9e6"] },
+  "marble-slabs": { consult: "Marble & Stone Consulting", desc: "Book-matched marble slabs in warm neutrals — selected at the quarry, then cut and finished in our Kishangarh workshop.", specs: [["Selection", "At the quarry"], ["Finish", "Polished / honed"], ["Lead time", "2 – 4 weeks"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1618220179428-22790b461013", "photo-1600607687939-ce8a6c25118c"] },
+  "natural-stone-facade": { consult: "Marble & Stone Consulting", desc: "Granite, kota and sandstone for facades that need to age well — flamed, split and honed faces.", specs: [["Stones", "Granite · kota · sandstone"], ["Setting", "Exterior rated"], ["Lead time", "3 – 5 weeks"]], gallery: ["photo-1580587771525-78b9dba3b914", "photo-1503387762-592deb58ef4e", "photo-1600585154340-be6161a56a0c"] },
+  "stone-finishes": { consult: "Marble & Stone Consulting", desc: "Honed, polished, flamed and split-face — finish samples made on the actual block you select.", specs: [["Range", "6 standard finishes"], ["Samples", "From selected block"], ["Lead time", "1 – 2 weeks"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1580587771525-78b9dba3b914", "photo-1780399334790-64af9ffb45fc"] },
+  "stone-applications": { consult: "Marble & Stone Consulting", desc: "Floors, walls, vanities and feature work — we template, cut and install with our own crew.", specs: [["Scope", "Supply + install"], ["Templating", "On site"], ["Lead time", "Per project"]], gallery: ["photo-1600585154340-be6161a56a0c", "photo-1600566753190-17f0baa2a6c3", "photo-1576354302919-96748cb8299e"] },
+  "flooring-materials": { consult: "Flooring Consulting", desc: "SPC, engineered oak and stone composite — a distributed range plus our own proprietary line.", specs: [["Range", "40+ SKUs"], ["Core", "SPC / engineered"], ["Lead time", "Ex-stock to 4 weeks"]], gallery: ["photo-1616486338812-3dadae4b4ace", "photo-1789381500057-2a288d79e9e6", "photo-1618220179428-22790b461013"] },
+  "flooring-finishes": { consult: "Flooring Consulting", desc: "Matte, brushed and natural-oil finishes — sampled on the exact plank batch you'll receive.", specs: [["Range", "3 finish families"], ["Samples", "Batch-matched"], ["Lead time", "1 week"]], gallery: ["photo-1600607687939-ce8a6c25118c", "photo-1789381500057-2a288d79e9e6", "photo-1780399334790-64af9ffb45fc"] },
+  "flooring-patterns": { consult: "Flooring Consulting", desc: "Herringbone, chevron and straight plank layouts — dry-laid and numbered before installation begins.", specs: [["Patterns", "Herringbone · chevron · plank"], ["Layout", "Dry-laid first"], ["Lead time", "Per project"]], gallery: ["photo-1618220179428-22790b461013", "photo-1616486338812-3dadae4b4ace", "photo-1600566753190-17f0baa2a6c3"] },
+  "flooring-applications": { consult: "Flooring Consulting", desc: "Residential, hospitality and contract floors — specified for traffic, acoustics and cleaning cycles.", specs: [["Rating", "Residential to contract"], ["Spec support", "In-house"], ["Lead time", "Per project"]], gallery: ["photo-1600607687939-ce8a6c25118c", "photo-1616486338812-3dadae4b4ace", "photo-1600585154340-be6161a56a0c"] },
+  "decor-lighting": { consult: "Interior Décor Consulting", desc: "Ambient, task and feature lighting — from backlit stone panels to a considered picture light.", specs: [["Range", "Ambient · task · feature"], ["Colour temp", "2200 – 3000K"], ["Lead time", "2 – 5 weeks"]], gallery: ["photo-1747258818911-dfde27ecabba", "photo-1618221195710-dd6b41faaea6", "photo-1600566753190-17f0baa2a6c3"] },
+  "decor-pieces": { consult: "Interior Décor Consulting", desc: "Sculptural objects and statement pieces that anchor a room without crowding it.", specs: [["Range", "Curated objects"], ["Sourcing", "In-house + studios"], ["Lead time", "Varies"]], gallery: ["photo-1600585154340-be6161a56a0c", "photo-1600607687939-ce8a6c25118c", "photo-1631396326646-c06a935ff3a6"] },
+  "decor-accessories": { consult: "Interior Décor Consulting", desc: "Considered accents that finish a room — trays, textiles, hardware and small objects.", specs: [["Range", "Accents & hardware"], ["Styling", "With our designers"], ["Lead time", "Varies"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1747258818911-dfde27ecabba", "photo-1780399334790-64af9ffb45fc"] },
+  "decor-textures": { consult: "Interior Décor Consulting", desc: "Lime plaster, linen, stone and wood — a texture palette sampled together before we commit.", specs: [["Samples", "Physical boards"], ["Range", "Plaster · textile · stone · wood"], ["Lead time", "1 – 2 weeks"]], gallery: ["photo-1780399334790-64af9ffb45fc", "photo-1600566753190-17f0baa2a6c3", "photo-1618220179428-22790b461013"] },
+  "decor-finishing": { consult: "Interior Décor Consulting", desc: "Hardware, trims and final touches — the last five percent that makes a room feel done.", specs: [["Range", "Hardware · trims · edges"], ["Matching", "To interior palette"], ["Lead time", "Per project"]], gallery: ["photo-1600566753190-17f0baa2a6c3", "photo-1600607687939-ce8a6c25118c", "photo-1747258818911-dfde27ecabba"] },
+  sofas: { consult: "Furniture Consulting", desc: "Deep, tailored seating in soft upholstery — hardwood frames built in our own workshop.", specs: [["Frames", "Solid hardwood"], ["Upholstery", "COM or curated"], ["Lead time", "6 – 8 weeks"]], gallery: ["photo-1600607687939-ce8a6c25118c", "photo-1631396326646-c06a935ff3a6", "photo-1600566753190-17f0baa2a6c3"] },
+  tables: { consult: "Furniture Consulting", desc: "Stone, timber and cast tops on considered bases — dining, coffee and side tables.", specs: [["Tops", "Stone · timber · cast"], ["Bases", "Steel · wood · stone"], ["Lead time", "5 – 7 weeks"]], gallery: ["photo-1600585154340-be6161a56a0c", "photo-1618221195710-dd6b41faaea6", "photo-1631396326646-c06a935ff3a6"] },
+  chairs: { consult: "Furniture Consulting", desc: "Dining, lounge and accent chairs — prototyped, sat in, adjusted, then made to order.", specs: [["Range", "Dining · lounge · accent"], ["Build", "Made to order"], ["Lead time", "5 – 7 weeks"]], gallery: ["photo-1631396326646-c06a935ff3a6", "photo-1737467030068-88ad20e617ca", "photo-1600607687939-ce8a6c25118c"] },
+  "custom-furniture": { consult: "Furniture Consulting", desc: "Bespoke joinery built to your brief — from a single headboard to a full suite of casegoods.", specs: [["Scope", "One-off to full suites"], ["Process", "Brief → prototype → build"], ["Lead time", "6 – 10 weeks"]], gallery: ["photo-1737467030068-88ad20e617ca", "photo-1631396326646-c06a935ff3a6", "photo-1600585154340-be6161a56a0c"] },
+  "furniture-materials": { consult: "Furniture Consulting", desc: "Solid wood, stone, metal and lacquer — finished samples approved before production begins.", specs: [["Range", "Wood · stone · metal · lacquer"], ["Approval", "Physical samples"], ["Lead time", "1 – 2 weeks"]], gallery: ["photo-1618221195710-dd6b41faaea6", "photo-1737467030068-88ad20e617ca", "photo-1780399334790-64af9ffb45fc"] },
+};
+
 const materialsFilter = ["All", "Marble", "Stone", "Onyx", "Travertine", "Terrazzo", "Wood", "Lime", "Flooring"];
 const productsFilter = ["All", "Slab", "Facade", "Fountain", "Table", "Furniture", "Lighting", "Decorative", "Finish", "Flooring"];
 const applicationsFilter = ["All", "Interior", "Exterior", "Residential", "Commercial", "Hospitality", "Stay"];
@@ -181,10 +221,10 @@ const serviceExtras = {
     consultLine: "Guidance on material selection, finishes, applications, combinations and suitability for your project.",
     consultCover: ["Material selection", "Finishes", "Applications", "Combinations", "Project suitability"],
     catalogue: [
-      { name: "Marble", image: "photo-1618221195710-dd6b41faaea6", desc: "Book-matched slabs in warm neutrals.", meta: "Marble · Slab" },
-      { name: "Natural Stone", image: "photo-1580587771525-78b9dba3b914", desc: "Granite, kota and sandstone for facades.", meta: "Stone · Facade" },
-      { name: "Stone Finishes", image: "photo-1503387762-592deb58ef4e", desc: "Honed, polished, flamed and split-face.", meta: "Finish · Surface" },
-      { name: "Applications", image: "photo-1600585154340-be6161a56a0c", desc: "Floors, walls, vanities and feature work.", meta: "Interior · Exterior" },
+      { slug: "marble-slabs", name: "Marble", image: "photo-1618221195710-dd6b41faaea6", desc: "Book-matched slabs in warm neutrals.", meta: "Marble · Slab" },
+      { slug: "natural-stone-facade", name: "Natural Stone", image: "photo-1580587771525-78b9dba3b914", desc: "Granite, kota and sandstone for facades.", meta: "Stone · Facade" },
+      { slug: "stone-finishes", name: "Stone Finishes", image: "photo-1503387762-592deb58ef4e", desc: "Honed, polished, flamed and split-face.", meta: "Finish · Surface" },
+      { slug: "stone-applications", name: "Applications", image: "photo-1600585154340-be6161a56a0c", desc: "Floors, walls, vanities and feature work.", meta: "Interior · Exterior" },
     ],
   },
   flooring: {
@@ -192,10 +232,10 @@ const serviceExtras = {
     consultLine: "Flooring selection, finish, durability, application and coordination with the overall interior.",
     consultCover: ["Flooring selection", "Finish", "Durability", "Application", "Interior coordination"],
     catalogue: [
-      { name: "Flooring Materials", image: "photo-1616486338812-3dadae4b4ace", desc: "SPC, engineered oak and stone composite.", meta: "Material · Plank" },
-      { name: "Finishes", image: "photo-1600607687939-ce8a6c25118c", desc: "Matte, brushed and natural oil finishes.", meta: "Finish · Texture" },
-      { name: "Patterns", image: "photo-1618220179428-22790b461013", desc: "Herringbone, chevron and plank layouts.", meta: "Pattern · Layout" },
-      { name: "Applications", image: "photo-1600566753190-17f0baa2a6c3", desc: "Residential, hospitality and contract.", meta: "Residential · Contract" },
+      { slug: "flooring-materials", name: "Flooring Materials", image: "photo-1616486338812-3dadae4b4ace", desc: "SPC, engineered oak and stone composite.", meta: "Material · Plank" },
+      { slug: "flooring-finishes", name: "Finishes", image: "photo-1600607687939-ce8a6c25118c", desc: "Matte, brushed and natural oil finishes.", meta: "Finish · Texture" },
+      { slug: "flooring-patterns", name: "Patterns", image: "photo-1618220179428-22790b461013", desc: "Herringbone, chevron and plank layouts.", meta: "Pattern · Layout" },
+      { slug: "flooring-applications", name: "Applications", image: "photo-1600566753190-17f0baa2a6c3", desc: "Residential, hospitality and contract.", meta: "Residential · Contract" },
     ],
   },
   interiors: {
@@ -203,11 +243,11 @@ const serviceExtras = {
     consultLine: "Décor selection, lighting, accessories, textures, colours and finishing details.",
     consultCover: ["Décor selection", "Lighting", "Accessories", "Textures", "Colours", "Finishing details"],
     catalogue: [
-      { name: "Lighting", image: "photo-1747258818911-dfde27ecabba", desc: "Ambient, task and feature lighting.", meta: "Lighting · Mood" },
-      { name: "Décor Pieces", image: "photo-1600585154340-be6161a56a0c", desc: "Sculptural objects and statement pieces.", meta: "Décor · Object" },
-      { name: "Accessories", image: "photo-1618221195710-dd6b41faaea6", desc: "Considered accents that finish a room.", meta: "Accessory · Detail" },
-      { name: "Textures", image: "photo-1780399334790-64af9ffb45fc", desc: "Lime plaster, linen, stone and wood.", meta: "Texture · Surface" },
-      { name: "Finishing Elements", image: "photo-1600566753190-17f0baa2a6c3", desc: "Hardware, trims and final touches.", meta: "Finish · Trim" },
+      { slug: "decor-lighting", name: "Lighting", image: "photo-1747258818911-dfde27ecabba", desc: "Ambient, task and feature lighting.", meta: "Lighting · Mood" },
+      { slug: "decor-pieces", name: "Décor Pieces", image: "photo-1600585154340-be6161a56a0c", desc: "Sculptural objects and statement pieces.", meta: "Décor · Object" },
+      { slug: "decor-accessories", name: "Accessories", image: "photo-1618221195710-dd6b41faaea6", desc: "Considered accents that finish a room.", meta: "Accessory · Detail" },
+      { slug: "decor-textures", name: "Textures", image: "photo-1780399334790-64af9ffb45fc", desc: "Lime plaster, linen, stone and wood.", meta: "Texture · Surface" },
+      { slug: "decor-finishing", name: "Finishing Elements", image: "photo-1600566753190-17f0baa2a6c3", desc: "Hardware, trims and final touches.", meta: "Finish · Trim" },
     ],
   },
   furniture: {
@@ -215,11 +255,11 @@ const serviceExtras = {
     consultLine: "Furniture selection, sizing, materials, finishes, placement and custom furniture guidance.",
     consultCover: ["Furniture selection", "Sizing", "Materials & finishes", "Placement", "Custom furniture"],
     catalogue: [
-      { name: "Sofas", image: "photo-1600607687939-ce8a6c25118c", desc: "Deep, tailored seating in soft upholstery.", meta: "Seating · Upholstery" },
-      { name: "Tables", image: "photo-1600585154340-be6161a56a0c", desc: "Stone, timber and cast tops.", meta: "Table · Surface" },
-      { name: "Chairs", image: "photo-1631396326646-c06a935ff3a6", desc: "Dining, lounge and accent chairs.", meta: "Chair · Craft" },
-      { name: "Custom Furniture", image: "photo-1737467030068-88ad20e617ca", desc: "Bespoke joinery built to your brief.", meta: "Bespoke · Joinery" },
-      { name: "Materials & Finishes", image: "photo-1618221195710-dd6b41faaea6", desc: "Solid wood, stone, metal and lacquer.", meta: "Material · Finish" },
+      { slug: "sofas", name: "Sofas", image: "photo-1600607687939-ce8a6c25118c", desc: "Deep, tailored seating in soft upholstery.", meta: "Seating · Upholstery" },
+      { slug: "tables", name: "Tables", image: "photo-1600585154340-be6161a56a0c", desc: "Stone, timber and cast tops.", meta: "Table · Surface" },
+      { slug: "chairs", name: "Chairs", image: "photo-1631396326646-c06a935ff3a6", desc: "Dining, lounge and accent chairs.", meta: "Chair · Craft" },
+      { slug: "custom-furniture", name: "Custom Furniture", image: "photo-1737467030068-88ad20e617ca", desc: "Bespoke joinery built to your brief.", meta: "Bespoke · Joinery" },
+      { slug: "furniture-materials", name: "Materials & Finishes", image: "photo-1618221195710-dd6b41faaea6", desc: "Solid wood, stone, metal and lacquer.", meta: "Material · Finish" },
     ],
   },
 };
@@ -907,10 +947,10 @@ function SegmentPage() {
     </section>
     {extra?.catalogue && <section className="svc-catalogue" data-testid="service-catalogue">
       <div className="detail-intro"><span className="section-index">02 — CATALOGUE</span><h2>Browse the<br /><em>{segment.name.toLowerCase()}.</em></h2></div>
-      <div className="svc-catalogue__grid">{extra.catalogue.map((item, index) => <article className="svc-cat-card" key={item.name} data-testid={`catalogue-card-${index + 1}`}>
+      <div className="svc-catalogue__grid">{extra.catalogue.map((item, index) => <Link className="svc-cat-card" to={`/catalogue/${item.slug}`} key={item.name} data-testid={`catalogue-card-${index + 1}`}>
         <div className="svc-cat-card__media"><img src={img(item.image, 900)} alt={item.name} loading="lazy" /></div>
         <div className="svc-cat-card__body"><span className="svc-cat-card__meta">{item.meta}</span><h3>{item.name}</h3><p>{item.desc}</p></div>
-      </article>)}</div>
+      </Link>)}</div>
     </section>}
     {extra && <section className="svc-consult" data-testid="service-consulting">
       <div className="svc-consult__inner">
@@ -1000,15 +1040,59 @@ function CataloguePage() {
     </section>
     <section className="catalogue-grid" data-testid="catalogue-grid">
       {filtered.map((item, index) => <article className="catalogue-card" key={item.slug} data-testid={`catalogue-card-${index + 1}`}>
-        <div className="catalogue-card__image"><img src={img(item.image, 900)} alt={item.name} /></div>
-        <div className="catalogue-card__body">
-          <div className="catalogue-card__meta"><span>{item.material}</span><span>{item.application}</span></div>
-          <h3>{item.name}</h3>
-          <p>{item.origin}</p>
-          <ContactTrigger className="contact-cta-btn" testId={`catalogue-request-${index + 1}`}>REQUEST SAMPLE</ContactTrigger>
-        </div>
+        <Link to={`/catalogue/${item.slug}`} className="catalogue-card__link" data-testid={`catalogue-card-link-${index + 1}`}>
+          <div className="catalogue-card__image"><img src={img(item.image, 900)} alt={item.name} /></div>
+          <div className="catalogue-card__body">
+            <div className="catalogue-card__meta"><span>{item.material}</span><span>{item.application}</span></div>
+            <h3>{item.name}</h3>
+            <p>{item.origin}</p>
+          </div>
+        </Link>
+        <div className="catalogue-card__cta"><ContactTrigger className="contact-cta-btn" testId={`catalogue-request-${index + 1}`}>REQUEST SAMPLE</ContactTrigger></div>
       </article>)}
       {filtered.length === 0 && <div className="empty-work">No items match those filters — try loosening one.</div>}
+    </section>
+  </main>;
+}
+
+function CatalogueItemPage() {
+  const { slug } = useParams();
+  const item = catalogueItems.find((entry) => entry.slug === slug)
+    || Object.values(serviceExtras).flatMap((extra) => extra.catalogue || []).find((entry) => entry.slug === slug);
+  const detail = item ? catalogueDetails[item.slug] : null;
+  const { openConsult } = useConsultation();
+  usePageMeta(
+    item ? `${item.name} | BDSM · BDS Marvel Catalogue` : "Catalogue | BDSM · BDS Marvel",
+    item ? `${item.name} — sampled, finished and supplied by BDSM · BDS Marvel.` : "Browse the BDSM · BDS Marvel material library."
+  );
+  if (!item || !detail) return <Navigate to="/catalogue" replace />;
+  const meta = item.meta || [item.material, item.product].filter(Boolean).join(" · ");
+  const chips = [meta, item.origin, item.application].filter(Boolean);
+  return <main className="cat-detail" data-testid="catalogue-detail-page">
+    <section className="cat-detail-hero" style={{ backgroundImage: `linear-gradient(160deg, rgba(10,8,6,.86), rgba(10,8,6,.55)), url(${img(item.image)})` }}>
+      <div className="detail-kicker"><span>BDSM · CATALOGUE</span><Link to="/catalogue" data-testid="detail-back-link">BACK TO CATALOGUE</Link></div>
+      <div className="cat-detail-hero__copy">
+        <p className="eyebrow">{meta.toUpperCase()}</p>
+        <h1>{item.name}<span className="hero-dot">.</span></h1>
+        <p className="detail-lede" data-testid="detail-description">{detail.desc}</p>
+        <div className="detail-services">{chips.map((chip) => <span key={chip}>{chip}</span>)}</div>
+      </div>
+    </section>
+    <section className="cat-detail-gallery">
+      <div className="detail-intro"><span className="section-index">01 — IN DETAIL</span><h2>Closer to<br /><em>the material.</em></h2></div>
+      <div className="case-study-images">{detail.gallery.map((image, index) => <figure key={image} className={`case-study-image case-study-image--${(index % 5) + 1}`}><img src={img(image, 1200)} alt={`${item.name} — detail ${index + 1}`} data-testid={`detail-gallery-image-${index + 1}`} /><figcaption>0{index + 1} / DETAIL</figcaption></figure>)}</div>
+    </section>
+    <section className="cat-detail-specs">
+      <div className="detail-intro"><span className="section-index">02 — SPECIFICATION</span><h2>Made to<br /><em>spec.</em></h2></div>
+      <ul className="cat-spec-list" data-testid="detail-spec-list">{detail.specs.map(([label, value]) => <li key={label}><span>{label}</span>{value}</li>)}</ul>
+    </section>
+    <section className="detail-cta">
+      <span className="section-index">READY WHEN YOU ARE</span>
+      <h2>See it in<br /><em>your project.</em></h2>
+      <div className="cat-detail-cta__actions">
+        <ContactTrigger className="contact-cta-btn" testId="detail-request-sample-btn">REQUEST SAMPLE</ContactTrigger>
+        <button type="button" className="np-btn cat-detail-cta__consult" onClick={() => openConsult(detail.consult)} data-testid="detail-consult-btn">GET CONSULTATION <ArrowUpRight size={16} /></button>
+      </div>
     </section>
   </main>;
 }
@@ -1391,6 +1475,7 @@ function App() {
           <Route path="/projects/:slug" element={<ProjectPage />} />
           <Route path="/businesses/:slug" element={<SegmentPage />} />
           <Route path="/catalogue" element={<CataloguePage />} />
+          <Route path="/catalogue/:slug" element={<CatalogueItemPage />} />
           <Route path="/experience" element={<ExperiencePage />} />
           <Route path="/stays" element={<StaysPage />} />
           <Route path="/stays/:tier" element={<StaysCategoryPage />} />

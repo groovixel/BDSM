@@ -24,6 +24,16 @@ studio with projects showcase, an Air BnB "stays" booking section, and a contact
   confirmed dates block overlapping dates (no double-booking).
 - Contact form stores inquiries and dispatches owner notification email.
 
+## Implemented (2026-09-25, pass 2) — Catalogue detail + mobile EXPLORE fix
+- Bug fix (user-reported): EXPLORE button was hidden on mobile (≤800px) for all six
+  business-network panels — removed the `display:none` rule; EXPLORE now shows and opens
+  each article's full detail page (/businesses/:slug) on mobile and desktop.
+- Catalogue Detail feature: dedicated `/catalogue/:slug` page for all 36 catalogue items
+  (18 main library items + 18 per-service catalogue cards) — hero, 3-photo detail gallery,
+  spec sheet, REQUEST SAMPLE (contact modal) + GET CONSULTATION (preselects service).
+- Per-service catalogue cards and main catalogue cards now link to their detail pages;
+  unknown slugs redirect to /catalogue. Testing agent: 13/13 assertions passed.
+
 ## Implemented (2026-09-25) — fresh import of `groovixel/bbd` main, verified running
 - Cloned `groovixel/bbd` (main, commit 80d172c) as-is into `/app`; no feature changes.
 - Config wired: `backend/.env` (MONGO_URL, DB_NAME=bds_marvel, EMERGENT_EMAIL_KEY

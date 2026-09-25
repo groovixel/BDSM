@@ -1,0 +1,24 @@
+{
+  "summary": "Mobile horizontal-overflow regression testing across ALL routes at 390x844, plus desktop 1920 and tablet 768 regressions on /businesses/construction and /businesses/interior-designing. Fix VERIFIED — no page has horizontal overflow (scrollWidth === clientWidth on 19/19 routes tested). CONSTRUCTION. word is fully visible in mobile screenshot. Desktop hero still renders at 180px, tablet at 76px — display type unchanged. EXPLORE buttons on home render with correct hrefs. No console errors surfaced during navigation.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/businesses/construction @ 390px", "issues": ["h1 boundingClientRect.right = 390.6 (0.6px past viewport). Not visible as clipping because .detail-page has overflow-x:clip and screenshot confirms the trailing period is visible right at the edge. Cosmetically the period sits flush with the right margin; consider a hair reduction in clamp min (e.g. 13vw) if perfect gutter symmetry is desired. Non-blocking."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "CSS fix is effective: overflow-x:clip on .detail-page contains the h1 which now measures ~52.65px on mobile (13.5vw of 390 = 52.65). Confirmed via runtime computed font-size.",
+    "Minor: on /businesses/construction the h1's own bounding rect extends 0.6px past viewport (right=390.6, cw=390). overflow-x:clip prevents this from causing page-level scroll. If you want zero clipping headroom for edge cases (older iOS with different font metrics), reduce clamp min from 40px→38px or vw from 13.5→13. Not required for the bug fix."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Iteration 7 verified mobile zoom-out CSS fix. Tested 16 static routes + 3 project case studies at 390px mobile — all have scrollWidth===clientWidth (0 diff). Tablet 768 and Desktop 1920 regressions on /businesses/construction pass (h1 font-size 76px and 180px respectively). Home EXPLORE buttons intact with hrefs. Only observation: /businesses/construction h1.right = 390.6 (0.6px past cw=390) but overflow-x:clip on .detail-page contains it and screenshot shows the trailing period is visible. Non-blocking.",
+  "rca of the issue": "Original bug: .detail-hero h1 used font-size clamp(54px,16vw,76px) — at 390px viewport 'CONSTRUCTION.' (13 chars) rendered ~62px wide, overflowing the 800px max-width column and causing scrollWidth=495 > clientWidth=390, triggering iOS mobile zoom-out with black side bars. Fix: (1) clamp reduced to clamp(40px,13.5vw,76px) in the effective max-width:800px block, computed size at 390px = 52.65px which fits. (2) overflow-x:clip added to .detail-page as a safety net. Both mitigations confirmed active at runtime."
+}

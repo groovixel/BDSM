@@ -1,0 +1,27 @@
+{
+  "summary": "Frontend-only verification of the contact-orbit scroll-linked animation (useOrbitScroll hook). All 7 acceptance checks pass: rings drift while idle, scroll advances rotation further, motion is smooth per-frame, orbit text stays upright, ::after ring counter-rotates at -0.7x factor, no console/page errors, and all home sections + /stays/premium render.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_details": {
+    "idle_drift": "before1 vs before2 (1.5s apart) differ — matrix(0.0765,0.997,...) → matrix(-0.9713,-0.2377,...). PASS",
+    "scroll_advance": "--orbit-rot: 553.87deg → 587.97deg after wheel scroll (+34deg beyond idle drift). PASS",
+    "smoothness": "6 samples ~100ms apart during scroll: [587.97, 588.50, 589.26, 589.88, 590.49, 591.14]. Diffs 0.5-0.76deg. No jumps >60deg. PASS",
+    "text_upright": "getComputedStyle(.contact-orbit).transform === 'none'. PASS",
+    "counter_rotate": "::before angle ~-127deg matches 587.97deg mod 360. ::after angle ~-55deg matches -0.7*587.97 mod 360 (~-51deg). Counter-rotation with -0.7 factor confirmed. PASS",
+    "errors": "0 console errors, 0 pageerrors. PASS",
+    "sections": "hero, experience-spotlight, purpose-section, work-slideshow, clients-section, contact-section all present. 18 network-panel* testids (6 panels × multiple sub-testids). /stays/premium loads with title 'Premium Stays | BDSM · BDS Marvel'. PASS"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Orbit animation implemented via useOrbitScroll rAF hook writing --orbit-rot CSS var (scrollY*0.05 + time*6deg/s). ::before uses rotate(var(--orbit-rot)); ::after uses calc(var(--orbit-rot) * -0.7). Main element and text have no transform. Preloader curtain: bypass via sessionStorage 'bdsm-visited'='1' or wait ~3s."
+}

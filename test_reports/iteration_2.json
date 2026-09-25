@@ -1,0 +1,19 @@
+{
+  "summary": "Verified the contact-orbit animation fix on the home page. The .contact-orbit element itself has transform: none (text 'LET'S BUILD / SOMETHING / TOGETHER' is upright and readable). The ::before ring has animation 'orbit-spin 26s' and the ::after ring rotates in reverse; sampled computed transforms 1.5s apart with no scroll/input on both pseudo-elements and both changed, confirming continuous smooth rotation independent of scroll. No console errors or pageerrors. All home page sections (hero-section, network-section with 6 panels ending in FURNITURE, experience-spotlight, purpose-section, work-slideshow, clients-section, contact-section) render correctly. Regression: /stays/premium loads (title 'Premium Stays | BDSM · BDS Marvel') without errors.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped per request)", "frontend": "100%"},
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Contact orbit is pure-CSS animated (@keyframes orbit-spin) now; verify by sampling getComputedStyle(el, '::before').transform at two timestamps without scrolling. Preloader curtain runs ~2.3s on first visit — use sessionStorage 'bdsm-visited'='1' or wait ~3s.",
+  "rca of the issue": "Fix confirmed working: removal of scroll-linked CSS vars/useOrbitScroll and adoption of pure CSS keyframes on ::before (26s) and ::after (19s reverse) yields continuous smooth rotation with upright text."
+}

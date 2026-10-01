@@ -116,6 +116,42 @@
         -working: true
         -agent: "main"
         -comment: "Healthy after repo import: GET /api/ returns Hello World. No backend changes in this round."
+  
+  - task: "Sample Requests API (POST /api/sample-requests, GET /api/sample-requests)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: true
+        -agent: "testing"
+        -comment: "✅ COMPLETE SUCCESS - ALL TESTS PASS (7/7). POST /api/sample-requests: ✓ Happy path with full payload (all required + optional fields) returns 201 with all fields echoed back including id, status='requested', created_at. ✓ Happy path with only required fields returns 201 with optional fields as null. ✓ Validation working correctly: missing required field 'address' returns 422, invalid email returns 422, phone too short (<3 chars) returns 422, address too short (<5 chars) returns 422. GET /api/sample-requests: ✓ Returns list sorted newest-first, ✓ Created items appear in list with correct data. ✓ Email notification failures (401 invalid X-Email-Key) are logged but do NOT block 201 response - endpoint returns 201 as expected per spec. All required fields (product, name, email, phone, address) and optional fields (brand, city, pincode, notes) working correctly. Tested with realistic data (marble tiles, granite slabs, Indian addresses/phone numbers)."
+  
+  - task: "Product Inquiries API (POST /api/product-inquiries, GET /api/product-inquiries)"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: true
+        -agent: "testing"
+        -comment: "✅ COMPLETE SUCCESS - ALL TESTS PASS (6/6). POST /api/product-inquiries: ✓ Happy path with full payload (all required + optional fields) returns 201 with all fields echoed back including id, created_at. ✓ Happy path with only required fields returns 201 with optional fields as null. ✓ Validation working correctly: missing required field 'brand' returns 422, invalid email returns 422, message too short (<5 chars) returns 422. GET /api/product-inquiries: ✓ Returns list sorted newest-first, ✓ Created items appear in list with correct data. ✓ Email notification failures (401 invalid X-Email-Key) are logged but do NOT block 201 response - endpoint returns 201 as expected per spec. All required fields (name, email, brand, message) and optional fields (phone, product, quantity) working correctly. Tested with realistic data (Kajaria tiles, Asian Paints, bulk quotes)."
+  
+  - task: "Existing endpoints regression check"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: true
+        -agent: "testing"
+        -comment: "✅ ALL EXISTING ENDPOINTS UNAFFECTED (8/8 regression tests pass). ✓ GET /api/ returns Hello World (200). ✓ GET /api/inquiries returns list (200). ✓ POST /api/inquiries creates inquiry (201). ✓ GET /api/bookings returns list (200). ✓ POST /api/bookings creates booking with status='requested' (201). ✓ GET /api/consultations returns list (200). ✓ POST /api/consultations creates consultation (201). ✓ GET /api/stays/availability returns {booked:[], requested:[]} structure (200). No regressions detected - all existing functionality intact after adding new endpoints."
 
 ## frontend:
   - task: "Segment-Coloured Purposes — rotating stone-tone tab highlight"
@@ -222,12 +258,13 @@
 ## metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 4
-  run_ui: true
+  test_sequence: 5
+  run_ui: false
 
 ## test_plan:
   current_focus:
-    - "Project card layout fix on brand/segment pages (SELECTED PROJECTS section)"
+    - "Sample Requests API (POST /api/sample-requests, GET /api/sample-requests)"
+    - "Product Inquiries API (POST /api/product-inquiries, GET /api/product-inquiries)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -294,3 +331,9 @@
         -working: true
         -agent: "testing"
         -comment: "✅✅✅ PROJECT CARD LAYOUT FIX VERIFIED - COMPLETE SUCCESS! Tested both pages at desktop 1920x1080. FLOORING PAGE: 1 project card 'Annex Workspace' - H3 width 771.6px (properly sized, NOT squeezed into 24px), H3 is 52px below image (within 60px threshold), H3 left edge perfectly aligned with card left edge (0px difference), arrow at right side (6px from right edge). MARBLE AND STONE PAGE: 3 project cards ('Meridian Residences', 'Atrium Mall', 'Civic Facade') - ALL 3 CARDS PASS ALL CHECKS: H3 width 771.6px for all cards, H3 is 52px below image, H3 left edge perfectly aligned (0px difference), arrow at right side (6px from right edge). REGRESSION CHECKS PASS: Flooring page catalogue section renders with 15 cards, Marble page catalogue section renders with 18 cards, no console errors. Screenshots confirm project titles now properly positioned on left side spanning full text column width with arrow icons correctly on right. The .mini-work__text wrapper fix successfully resolved the grid layout issue. User's reported bug COMPLETELY RESOLVED."
+
+## agent_communication (New API endpoints round):
+    -agent: "main"
+    -message: "NEW ENDPOINTS ADDED: Two new form submission endpoints added to backend/server.py: (1) POST /api/sample-requests (catalogue 'Request Sample' form) with required fields product/name/email/phone/address and optional brand/city/pincode/notes, returns 201 with id/status='requested'/created_at, GET endpoint lists newest-first. (2) POST /api/product-inquiries (brand-page 'Make an Inquiry' form) with required name/email/brand/message and optional phone/product/quantity, returns 201 with created object, GET endpoint lists newest-first. Both endpoints send owner email notifications via external proxy (failures logged, not raised - endpoint still returns 201). NEEDS TESTING AGENT VERIFICATION: comprehensive test coverage for both endpoints including happy paths (full payload + required-only), validation failures (missing required fields, invalid email, field length constraints), GET list ordering, and regression checks on all existing endpoints (/, inquiries, bookings, consultations, stays/availability). Verify email failures don't cause 500/502 responses."
+    -agent: "testing"
+    -message: "✅✅✅ COMPREHENSIVE BACKEND TESTING COMPLETE - ALL 23 TESTS PASS (100% success rate). NEW ENDPOINTS: ✅ POST /api/sample-requests (7 tests): Happy paths with full and minimal payloads both return 201 with correct data structure (id, status='requested', created_at, all fields echoed). Validation working perfectly: missing 'address' returns 422, invalid email returns 422, phone <3 chars returns 422, address <5 chars returns 422. GET list returns newest-first ordering. ✅ POST /api/product-inquiries (6 tests): Happy paths with full and minimal payloads both return 201 with correct structure. Validation working perfectly: missing 'brand' returns 422, invalid email returns 422, message <5 chars returns 422. GET list returns newest-first ordering. ✅ REGRESSION CHECKS (8 tests): ALL existing endpoints unaffected - GET /api/ (200 Hello World), GET/POST /api/inquiries (200/201), GET/POST /api/bookings (200/201), GET/POST /api/consultations (200/201), GET /api/stays/availability (200 with booked/requested structure). ✅ EMAIL NOTIFICATION HANDLING (2 tests): Email proxy returns 401 'invalid X-Email-Key' but endpoints correctly return 201 - failures are logged to backend.err.log but NOT raised to client, exactly as specified. BACKEND LOGS CLEAN: No 500/502 responses during test run, only expected email notification errors logged. Test file: /app/backend_test.py with realistic test data (Indian marble/tile products, addresses, phone numbers). Ready for production - both new endpoints working perfectly with proper validation and error handling."

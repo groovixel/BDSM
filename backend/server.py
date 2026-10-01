@@ -544,6 +544,165 @@ async def list_consultations(limit: int = 50):
 
 
 
+# --- Shared email helpers ---
+
+def _email_row(label, value):
+    return (f'<tr><td style="padding:8px 16px 8px 0;color:#8a8577;font-size:11px;'
+            f'letter-spacing:2px;text-transform:uppercase;vertical-align:top">{label}</td>'
+            f'<td style="padding:8px 0;font-size:14px;color:#141414">{value}</td></tr>')
+
+
+def _email_shell(kicker: str, title: str, rows: str, source: str) -> str:
+    return ('<table role="presentation" width="100%" style="background:#f5f2ea;padding:32px 0">'
+            '<tr><td align="center"><table role="presentation" width="560" '
+            'style="background:#ffffff;padding:32px;font-family:Arial,sans-serif">'
+            f'<tr><td><p style="font-size:11px;letter-spacing:3px;color:#8a8577;margin:0 0 8px">BDS MARVEL &middot; {kicker}</p>'
+            f'<h1 style="font-size:22px;margin:0 0 24px;color:#141414">{title}</h1>'
+            f'<table role="presentation" width="100%">{rows}</table>'
+            f'<p style="font-size:12px;color:#8a8577;margin:24px 0 0">Sent by the {escape(EMAIL_FROM_NAME)} website {source}. We never ask for passwords or card details by email.</p>'
+            '</td></tr></table></td></tr></table>')
+
+
+# --- Sample requests (catalogue "Request Sample" form) ---
+
+class SampleRequestCreate(BaseModel):
+    product: str = Field(min_length=1, max_length=160)
+    brand: Optional[str] = Field(default=None, max_length=120)
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    phone: str = Field(min_length=3, max_length=40)
+    address: str = Field(min_length=5, max_length=500)
+    city: Optional[str] = Field(default=None, max_length=120)
+    pincode: Optional[str] = Field(default=None, max_length=12)
+    notes: Optional[str] = Field(default=None, max_length=1000)
+
+
+class SampleRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    product: str
+    brand: Optional[str] = None
+    name: str
+    email: str
+    phone: str
+    address: str
+    city: Optional[str] = None
+    pincode: Optional[str] = None
+    notes: Optional[str] = None
+    status: str = "requested"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+def _sample_request_email_html(sr: "SampleRequest") -> str:
+    rows = _email_row("Product", escape(sr.product))
+    if sr.brand:
+        rows += _email_row("Brand", escape(sr.brand))
+    rows += _email_row("Name", escape(sr.name))
+    rows += _email_row("Phone", escape(sr.phone))
+    rows += _email_row("Email", f'<a href="mailto:{escape(sr.email)}" style="color:#141414">{escape(sr.email)}</a>')
+    rows += _email_row("Ship to", escape(sr.address).replace("\n", "<br />"))
+    if sr.city:
+        rows += _email_row("City", escape(sr.city))
+    if sr.pincode:
+        rows += _email_row("Pincode", escape(sr.pincode))
+    if sr.notes:
+        rows += _email_row("Notes", escape(sr.notes).replace("\n", "<br />"))
+    return _email_shell("SAMPLE REQUEST", "New sample request", rows, "sample request form")
+
+
+@api_router.post("/sample-requests", response_model=SampleRequest, status_code=201)
+async def create_sample_request(payload: SampleRequestCreate):
+    sample = SampleRequest(**payload.model_dump())
+    doc = sample.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.sample_requests.insert_one(doc)
+    logger.info("New sample request (%s) from %s <%s>", sample.product, sample.name, sample.email)
+    try:
+        await send_email(to=OWNER_EMAIL, subject=f"New sample request - {sample.product}",
+                         html=_sample_request_email_html(sample))
+        logger.info("Sample request notification emailed to %s", OWNER_EMAIL)
+    except Exception as exc:
+        logger.error("Sample request saved but email notification failed: %s", exc)
+    return sample
+
+
+@api_router.get("/sample-requests", response_model=List[SampleRequest])
+async def list_sample_requests(limit: int = 50):
+    limit = max(1, min(limit, 200))
+    rows = await db.sample_requests.find({}, {"_id": 0}).sort("created_at", -1).to_list(limit)
+    for row in rows:
+        if isinstance(row.get('created_at'), str):
+            row['created_at'] = datetime.fromisoformat(row['created_at'])
+    return rows
+
+
+# --- Product inquiries (brand-page "Make an Inquiry" form) ---
+
+class ProductInquiryCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    email: EmailStr
+    phone: Optional[str] = Field(default=None, max_length=40)
+    brand: str = Field(min_length=1, max_length=120)
+    product: Optional[str] = Field(default=None, max_length=160)
+    quantity: Optional[str] = Field(default=None, max_length=120)
+    message: str = Field(min_length=5, max_length=4000)
+
+
+class ProductInquiry(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: str
+    phone: Optional[str] = None
+    brand: str
+    product: Optional[str] = None
+    quantity: Optional[str] = None
+    message: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+def _product_inquiry_email_html(pi: "ProductInquiry") -> str:
+    rows = _email_row("Brand", escape(pi.brand))
+    if pi.product:
+        rows += _email_row("Product", escape(pi.product))
+    if pi.quantity:
+        rows += _email_row("Quantity", escape(pi.quantity))
+    rows += _email_row("Name", escape(pi.name))
+    rows += _email_row("Email", f'<a href="mailto:{escape(pi.email)}" style="color:#141414">{escape(pi.email)}</a>')
+    if pi.phone:
+        rows += _email_row("Phone", escape(pi.phone))
+    rows += _email_row("Message", escape(pi.message).replace("\n", "<br />"))
+    return _email_shell("PRODUCT INQUIRY", f"New {escape(pi.brand)} product inquiry", rows, "product inquiry form")
+
+
+@api_router.post("/product-inquiries", response_model=ProductInquiry, status_code=201)
+async def create_product_inquiry(payload: ProductInquiryCreate):
+    inquiry = ProductInquiry(**payload.model_dump())
+    doc = inquiry.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.product_inquiries.insert_one(doc)
+    logger.info("New product inquiry (%s / %s) from %s <%s>", inquiry.brand, inquiry.product or "-", inquiry.name, inquiry.email)
+    try:
+        await send_email(to=OWNER_EMAIL, subject=f"New product inquiry - {inquiry.brand}",
+                         html=_product_inquiry_email_html(inquiry))
+        logger.info("Product inquiry notification emailed to %s", OWNER_EMAIL)
+    except Exception as exc:
+        logger.error("Product inquiry saved but email notification failed: %s", exc)
+    return inquiry
+
+
+@api_router.get("/product-inquiries", response_model=List[ProductInquiry])
+async def list_product_inquiries(limit: int = 50):
+    limit = max(1, min(limit, 200))
+    rows = await db.product_inquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(limit)
+    for row in rows:
+        if isinstance(row.get('created_at'), str):
+            row['created_at'] = datetime.fromisoformat(row['created_at'])
+    return rows
+
+
 # Include the router in the main app
 app.include_router(api_router)
 

@@ -777,7 +777,7 @@ function PageShell({ children }) {
     smoothScrollTo(0, { immediate: true });
     startSmoothScroll();
   }, [location.pathname, location.hash]);
-  return <div className="route-shell" key={location.pathname}><Header />{children}<Footer /><ContactModal /><ConsultationModal /></div>;
+  return <div className="route-shell" key={location.pathname}><Header />{children}<Footer /><ContactModal /><ConsultationModal /><SampleModal /><InquiryModal /></div>;
 }
 
 const ContactCtx = createContext({ open: false, setOpen: () => {} });
@@ -795,6 +795,24 @@ function ConsultationProvider({ children }) {
   return <ConsultationCtx.Provider value={{ ...state, openConsult, closeConsult }}>{children}</ConsultationCtx.Provider>;
 }
 function useConsultation() { return useContext(ConsultationCtx); }
+
+const SampleCtx = createContext({ open: false, product: "", brand: "", openSample: () => {}, closeSample: () => {} });
+function SampleProvider({ children }) {
+  const [state, setState] = useState({ open: false, product: "", brand: "" });
+  const openSample = (product = "", brand = "") => setState({ open: true, product, brand });
+  const closeSample = () => setState((prev) => ({ ...prev, open: false }));
+  return <SampleCtx.Provider value={{ ...state, openSample, closeSample }}>{children}</SampleCtx.Provider>;
+}
+function useSample() { return useContext(SampleCtx); }
+
+const InquiryCtx = createContext({ open: false, brand: "", product: "", options: [], openInquiry: () => {}, closeInquiry: () => {} });
+function InquiryProvider({ children }) {
+  const [state, setState] = useState({ open: false, brand: "", product: "", options: [] });
+  const openInquiry = (brand = "", product = "", options = []) => setState({ open: true, brand, product, options });
+  const closeInquiry = () => setState((prev) => ({ ...prev, open: false }));
+  return <InquiryCtx.Provider value={{ ...state, openInquiry, closeInquiry }}>{children}</InquiryCtx.Provider>;
+}
+function useInquiry() { return useContext(InquiryCtx); }
 
 function ConsultationModal() {
   const { open, service, closeConsult } = useConsultation();
@@ -889,6 +907,162 @@ function ConsultationModal() {
 }
 
 
+function SampleModal() {
+  const { open, product, brand, closeSample } = useSample();
+  const empty = { name: "", email: "", phone: "", address: "", city: "", pincode: "", notes: "" };
+  const [form, setForm] = useState(empty);
+  const [status, setStatus] = useState({ state: "idle", error: "" });
+  const firstFieldRef = useRef(null);
+  const scrollResumeRef = useRef(null);
+
+  useEffect(() => {
+    window.clearTimeout(scrollResumeRef.current);
+    if (open) {
+      setStatus({ state: "idle", error: "" });
+      setForm(empty);
+      window.setTimeout(() => firstFieldRef.current?.focus(), 80);
+      document.body.style.overflow = "hidden";
+      stopSmoothScroll();
+      return () => { document.body.style.overflow = ""; };
+    }
+    document.body.style.overflow = "";
+    scrollResumeRef.current = window.setTimeout(() => startSmoothScroll(), 60);
+    return () => window.clearTimeout(scrollResumeRef.current);
+  }, [open]);
+  useEffect(() => { const onKey = (event) => { if (event.key === "Escape") closeSample(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, [closeSample]);
+
+  const update = (field) => (event) => setForm((prev) => ({ ...prev, [field]: event.target.value }));
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setStatus({ state: "sending", error: "" });
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/sample-requests`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product, brand: brand || null,
+          name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim(),
+          address: form.address.trim(), city: form.city.trim() || null,
+          pincode: form.pincode.trim() || null, notes: form.notes.trim() || null,
+        }),
+      });
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail?.detail?.[0]?.msg || detail?.detail || "Please double-check your details and try again.");
+      }
+      setStatus({ state: "sent", error: "" });
+      setForm(empty);
+    } catch (error) {
+      setStatus({ state: "error", error: error.message || "Something went wrong. Please try again." });
+    }
+  };
+
+  if (!open) return null;
+  return <div className="contact-modal" role="dialog" aria-modal="true" aria-label="Request a material sample" data-testid="sample-modal">
+    <button className="contact-modal__scrim" onClick={closeSample} aria-label="Close" data-testid="sample-modal-scrim" />
+    <div className="contact-modal__panel">
+      <button className="contact-modal__close" onClick={closeSample} aria-label="Close" data-testid="sample-modal-close"><X size={22} /></button>
+      <div className="contact-modal__intro">
+        <span className="section-index">REQUEST A SAMPLE</span>
+        <h2>Feel it in<br /><em>your hands.</em></h2>
+        <p data-testid="sample-modal-product">{product}{brand ? ` · ${brand}` : ""} — we courier material samples to your studio or site. Share a delivery address and we will confirm dispatch within one working day.</p>
+        <div className="contact-modal__meta"><span>info@bdsmarvel.com</span><span>Mumbai · Kishangarh · Gurugram</span></div>
+      </div>
+      {status.state === "sent" ? <div className="contact-modal__success" data-testid="sample-modal-success"><Check size={40} /><h3>Sample request received.</h3><p>We will confirm dispatch of your {product} sample within one working day.</p><button onClick={closeSample} data-testid="sample-modal-done">CLOSE</button></div> : <form className="contact-modal__form" onSubmit={submit} data-testid="sample-modal-form" noValidate>
+        <label className="cm-field"><span>Your name</span><input ref={firstFieldRef} required value={form.name} onChange={update("name")} placeholder="Riya Kapoor" data-testid="sample-name-input" /></label>
+        <label className="cm-field"><span>Email</span><input required type="email" value={form.email} onChange={update("email")} placeholder="you@brand.com" data-testid="sample-email-input" /></label>
+        <label className="cm-field"><span>Phone</span><input required value={form.phone} onChange={update("phone")} placeholder="+91 98xxxxxxxx" data-testid="sample-phone-input" /></label>
+        <label className="cm-field"><span>City</span><input value={form.city} onChange={update("city")} placeholder="Jaipur" data-testid="sample-city-input" /></label>
+        <label className="cm-field cm-field--full"><span>Shipping address</span><textarea required rows={3} value={form.address} onChange={update("address")} placeholder="Studio or site address the sample should reach" data-testid="sample-address-input" /></label>
+        <label className="cm-field"><span>Pincode</span><input value={form.pincode} onChange={update("pincode")} placeholder="302001" data-testid="sample-pincode-input" /></label>
+        <label className="cm-field"><span>Notes (optional)</span><input value={form.notes} onChange={update("notes")} placeholder="Finish, thickness, timeline…" data-testid="sample-notes-input" /></label>
+        {status.state === "error" && <div className="cm-error" data-testid="sample-modal-error">{status.error}</div>}
+        <button type="submit" className="cm-submit" disabled={status.state === "sending"} data-testid="sample-modal-submit">{status.state === "sending" ? <><Loader2 size={16} className="cm-spin" /> Sending…</> : <>REQUEST SAMPLE <ArrowUpRight size={16} /></>}</button>
+      </form>}
+    </div>
+  </div>;
+}
+
+function InquiryModal() {
+  const { open, brand, product, options, closeInquiry } = useInquiry();
+  const empty = { name: "", email: "", phone: "", product: "", quantity: "", message: "" };
+  const [form, setForm] = useState(empty);
+  const [status, setStatus] = useState({ state: "idle", error: "" });
+  const firstFieldRef = useRef(null);
+  const scrollResumeRef = useRef(null);
+
+  const derived = [...catalogueItems, ...Object.values(serviceExtras).flatMap((extra) => extra.catalogue || [])]
+    .filter((entry) => (entry.brand || "").toLowerCase() === (brand || "").toLowerCase())
+    .map((entry) => entry.name);
+  const productOptions = options.length ? options : [...new Set(derived)];
+
+  useEffect(() => {
+    window.clearTimeout(scrollResumeRef.current);
+    if (open) {
+      setStatus({ state: "idle", error: "" });
+      setForm({ ...empty, product: product || "" });
+      window.setTimeout(() => firstFieldRef.current?.focus(), 80);
+      document.body.style.overflow = "hidden";
+      stopSmoothScroll();
+      return () => { document.body.style.overflow = ""; };
+    }
+    document.body.style.overflow = "";
+    scrollResumeRef.current = window.setTimeout(() => startSmoothScroll(), 60);
+    return () => window.clearTimeout(scrollResumeRef.current);
+  }, [open, product]);
+  useEffect(() => { const onKey = (event) => { if (event.key === "Escape") closeInquiry(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, [closeInquiry]);
+
+  const update = (field) => (event) => setForm((prev) => ({ ...prev, [field]: event.target.value }));
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setStatus({ state: "sending", error: "" });
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/product-inquiries`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() || null,
+          brand, product: form.product || null,
+          quantity: form.quantity.trim() || null, message: form.message.trim(),
+        }),
+      });
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        throw new Error(detail?.detail?.[0]?.msg || detail?.detail || "Please double-check your details and try again.");
+      }
+      setStatus({ state: "sent", error: "" });
+      setForm(empty);
+    } catch (error) {
+      setStatus({ state: "error", error: error.message || "Something went wrong. Please try again." });
+    }
+  };
+
+  if (!open) return null;
+  return <div className="contact-modal" role="dialog" aria-modal="true" aria-label="Make a product inquiry" data-testid="inquiry-modal">
+    <button className="contact-modal__scrim" onClick={closeInquiry} aria-label="Close" data-testid="inquiry-modal-scrim" />
+    <div className="contact-modal__panel">
+      <button className="contact-modal__close" onClick={closeInquiry} aria-label="Close" data-testid="inquiry-modal-close"><X size={22} /></button>
+      <div className="contact-modal__intro">
+        <span className="section-index">MAKE AN INQUIRY</span>
+        <h2>Pricing, stock<br /><em>and lead times.</em></h2>
+        <p data-testid="inquiry-modal-brand">Enquiring under {brand}. Tell us what you need and roughly how much — the {brand} desk replies within one working day.</p>
+        <div className="contact-modal__meta"><span>info@bdsmarvel.com</span><span>Mumbai · Kishangarh · Gurugram</span></div>
+      </div>
+      {status.state === "sent" ? <div className="contact-modal__success" data-testid="inquiry-modal-success"><Check size={40} /><h3>Inquiry sent.</h3><p>The {brand} desk will come back with pricing and availability within one working day.</p><button onClick={closeInquiry} data-testid="inquiry-modal-done">CLOSE</button></div> : <form className="contact-modal__form" onSubmit={submit} data-testid="inquiry-modal-form" noValidate>
+        <label className="cm-field"><span>Your name</span><input ref={firstFieldRef} required value={form.name} onChange={update("name")} placeholder="Riya Kapoor" data-testid="inquiry-name-input" /></label>
+        <label className="cm-field"><span>Email</span><input required type="email" value={form.email} onChange={update("email")} placeholder="you@brand.com" data-testid="inquiry-email-input" /></label>
+        <label className="cm-field"><span>Phone (optional)</span><input value={form.phone} onChange={update("phone")} placeholder="+91 98xxxxxxxx" data-testid="inquiry-phone-input" /></label>
+        <label className="cm-field"><span>Product interest</span><select value={form.product} onChange={update("product")} data-testid="inquiry-product-select"><option value="">Multiple / not sure yet</option>{productOptions.map((name) => <option key={name} value={name}>{name}</option>)}</select></label>
+        <label className="cm-field cm-field--full"><span>Approx. quantity</span><input value={form.quantity} onChange={update("quantity")} placeholder="e.g. 200 sqft · 40 sheets · 12 rooms" data-testid="inquiry-quantity-input" /></label>
+        <label className="cm-field cm-field--full"><span>Your requirement</span><textarea required rows={4} value={form.message} onChange={update("message")} placeholder="Project, finishes in mind, delivery city, timeline — anything helps." data-testid="inquiry-message-input" /></label>
+        {status.state === "error" && <div className="cm-error" data-testid="inquiry-modal-error">{status.error}</div>}
+        <button type="submit" className="cm-submit" disabled={status.state === "sending"} data-testid="inquiry-modal-submit">{status.state === "sending" ? <><Loader2 size={16} className="cm-spin" /> Sending…</> : <>SEND INQUIRY <ArrowUpRight size={16} /></>}</button>
+      </form>}
+    </div>
+  </div>;
+}
+
+
 function ContactModal() {
   const { open, setOpen } = useContact();
   const [form, setForm] = useState({ name: "", email: "", company: "", segment: "", budget: "", message: "" });
@@ -959,12 +1133,18 @@ function ContactTrigger({ className = "", children = "START A PROJECT", testId =
   return <button type="button" className={className} onClick={() => setOpen(true)} data-testid={testId}>{children} <ArrowUpRight size={16} /></button>;
 }
 
+function SampleTrigger({ className = "", product = "", brand = "", children = "REQUEST SAMPLE", testId = "open-sample-modal" }) {
+  const { openSample } = useSample();
+  return <button type="button" className={className} onClick={() => openSample(product, brand)} data-testid={testId}>{children} <ArrowUpRight size={16} /></button>;
+}
+
 function SegmentPage() {
   const { slug } = useParams();
   const segment = segments.find((item) => item.slug === slug) || segments[0];
   const related = projects.filter((item) => item.segment === segment.name);
   const extra = serviceExtras[segment.slug];
   const { openConsult } = useConsultation();
+  const { openInquiry } = useInquiry();
   usePageMeta(...(SEGMENT_SEO[segment.slug] || SEGMENT_SEO["marble-and-stone"]));
   // BDS Marvel (interior-designing) shows Selected Projects before Consulting; all other brand pages keep Consulting first.
   const projectsFirst = segment.slug === "interior-designing";
@@ -1000,7 +1180,7 @@ function SegmentPage() {
         <ul className="svc-consult__cover">{extra.consultCover.map((c) => <li key={c}>{c}</li>)}</ul>
         <div className="svc-consult__actions">
           <button type="button" className="np-btn np-btn--solid" onClick={() => openConsult(extra.consultService)} data-testid="get-consultation-btn">GET CONSULTATION <ArrowUpRight size={16} /></button>
-          {extra.catalogue && <button type="button" className="np-btn np-btn--ghost" onClick={() => openConsult(extra.consultService)} data-testid="make-inquiry-btn">MAKE AN INQUIRY <ArrowUpRight size={16} /></button>}
+          {extra.catalogue && <button type="button" className="np-btn np-btn--ghost" onClick={() => openInquiry(segment.parent || segment.name, "", extra.catalogue.map((entry) => entry.name))} data-testid="make-inquiry-btn">MAKE AN INQUIRY <ArrowUpRight size={16} /></button>}
         </div>
       </div>
     </section>}
@@ -1084,7 +1264,7 @@ function CataloguePage() {
             <p>{item.origin}</p>
           </div>
         </Link>
-        <div className="catalogue-card__cta"><ContactTrigger className="contact-cta-btn" testId={`catalogue-request-${index + 1}`}>REQUEST SAMPLE</ContactTrigger></div>
+        <div className="catalogue-card__cta"><SampleTrigger className="contact-cta-btn" product={item.name} brand={item.brand} testId={`catalogue-request-${index + 1}`}>REQUEST SAMPLE</SampleTrigger></div>
       </article>)}
       {filtered.length === 0 && <div className="empty-work">No items match those filters — try loosening one.</div>}
     </section>
@@ -1127,7 +1307,7 @@ function CatalogueItemPage() {
       <span className="section-index">READY WHEN YOU ARE</span>
       <h2>See it in<br /><em>your project.</em></h2>
       <div className="cat-detail-cta__actions">
-        <ContactTrigger className="contact-cta-btn" testId="detail-request-sample-btn">REQUEST SAMPLE</ContactTrigger>
+        <SampleTrigger className="contact-cta-btn" product={item.name} brand={brand} testId="detail-request-sample-btn">REQUEST SAMPLE</SampleTrigger>
         <button type="button" className="np-btn cat-detail-cta__consult" onClick={() => openConsult(detail.consult)} data-testid="detail-consult-btn">GET CONSULTATION <ArrowUpRight size={16} /></button>
       </div>
     </section>
@@ -1480,6 +1660,8 @@ function App() {
   return <BrowserRouter>
     <ContactProvider>
       <ConsultationProvider>
+      <SampleProvider>
+      <InquiryProvider>
       <PageShell>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -1498,6 +1680,8 @@ function App() {
           <Route path="/agency/:slug" element={<SegmentPage />} />
         </Routes>
       </PageShell>
+      </InquiryProvider>
+      </SampleProvider>
       </ConsultationProvider>
     </ContactProvider>
   </BrowserRouter>;

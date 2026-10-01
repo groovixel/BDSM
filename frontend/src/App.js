@@ -312,9 +312,9 @@ function useOrbitScroll() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
     let raf;
     let current = 0;
-    const loop = (now) => {
-      // Slow continuous drift + scroll-linked advance, lerped per frame for smoothness
-      const target = window.scrollY * 0.05 + (now / 1000) * 6;
+    const loop = () => {
+      // Scroll-linked rotation only — no continuous drift; lerped per frame for smoothness
+      const target = window.scrollY * 0.08;
       current += (target - current) * 0.12;
       document.documentElement.style.setProperty("--orbit-rot", `${current.toFixed(2)}deg`);
       raf = requestAnimationFrame(loop);

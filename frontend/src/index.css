@@ -9,6 +9,18 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+#bdsm-marvel-root {
+    min-height: 100vh;
+    background: #0d0b09;
+    color: #f4efe6;
+    font-family: 'Outfit', sans-serif;
+}
+
+#bdsm-marvel-root,
+#bdsm-marvel-root * {
+    box-sizing: border-box;
+}
+
 code {
     font-family:
         source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;

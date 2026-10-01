@@ -1,12 +1,15 @@
 import { useContext, useEffect, useMemo, useRef, useState, createContext } from "react";
 import { ArrowDown, ArrowUp, ArrowUpRight, Check, ChevronDown, ChevronLeft, ChevronRight, Facebook, Instagram, Linkedin, Loader2, Search, Twitter, X, Youtube } from "lucide-react";
-import { BrowserRouter, Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter, HashRouter, Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import "@/App.css";
 import { initSmoothScroll, smoothScrollTo, startSmoothScroll, stopSmoothScroll } from "@/lib/smoothScroll";
 
 const IMG = "https://images.unsplash.com/";
 const img = (id, w = 1600) => `${IMG}${id}?auto=format&fit=crop&w=${w}&q=80`;
+const publicAsset = (path) => `${process.env.PUBLIC_URL || ""}${path}`;
+const apiBaseUrl = process.env.REACT_APP_BACKEND_URL || "";
+const Router = process.env.REACT_APP_WORDPRESS_MODE === "true" ? HashRouter : BrowserRouter;
 
 const segments = [
   { slug: "interior-designing", name: "INTERIOR DESIGNING", parent: "BDS Marvel", kicker: "Concept to detail", tone: "sage", tagline: "Design that decides before the build begins.", body: "Concept, spatial planning, material palettes and detailing — resolved with our own stone, flooring and construction teams before a single wall is touched.", hero: "photo-1631679706909-1844bbd07221", services: ["Concept & Moodboards", "Space Planning", "Material Palettes", "3D Visualisation"], team: ["Principal designers", "Visualisation studio", "Procurement desk"] },
@@ -67,30 +70,30 @@ const approach = [
 const purposeTones = ["sand", "bronze", "charcoal", "terracotta"];
 
 const clients = [
-  { name: "L&T — LNT Pvt Ltd", logo: "/clients/lnt.png" },
-  { name: "Mangalam Organics", logo: "/clients/mangalam.png" },
-  { name: "The Lalit", logo: "/clients/lalit.png" },
-  { name: "ITC Hotels", logo: "/clients/itc.png" },
-  { name: "Boutique Hotels", logo: "/clients/boutique.png" },
-  { name: "Clarks Amer", logo: "/clients/clarks-amer.png" },
-  { name: "NHAI", logo: "/clients/nhai.png" },
-  { name: "Kshetrapal Hospital Ajmer", logo: "/clients/kshetrapal.png" },
-  { name: "Mewar Estate Ajmer", logo: "/clients/mewar-estate.png" },
-  { name: "JLN Hospital Ajmer", logo: "/clients/jln.png" },
-  { name: "MPS School Ajmer", logo: "/clients/mps.png" },
-  { name: "DWPS Ajmer", logo: "/clients/dwps.png" },
-  { name: "Mayo College Ajmer", logo: "/clients/mayo.png" },
-  { name: "Taj Pratap Mahal Ajmer", logo: "/clients/taj.png" },
-  { name: "JSB Kishangarh", logo: "/clients/jsb.png" },
-  { name: "AKV Kishangarh", logo: "/clients/akv.png" },
-  { name: "Bhutra Marble Kishangarh", logo: "/clients/bhutra.png" },
-  { name: "CBSE Ajmer", logo: "/clients/cbse.png" },
-  { name: "RBSE Ajmer", logo: "/clients/rbse.png" },
-  { name: "Income Tax Department Ajmer", logo: "/clients/income-tax.png" },
-  { name: "Army Cantt", logo: "/clients/army-cantt.png" },
-  { name: "Ramada Ajmer", logo: "/clients/ramada.png" },
-  { name: "Satguru Group Ajmer", logo: "/clients/satguru.png" },
-  { name: "Marriott", logo: "/clients/marriott.png" },
+  { name: "L&T — LNT Pvt Ltd", logo: publicAsset("/clients/lnt.png") },
+  { name: "Mangalam Organics", logo: publicAsset("/clients/mangalam.png") },
+  { name: "The Lalit", logo: publicAsset("/clients/lalit.png") },
+  { name: "ITC Hotels", logo: publicAsset("/clients/itc.png") },
+  { name: "Boutique Hotels", logo: publicAsset("/clients/boutique.png") },
+  { name: "Clarks Amer", logo: publicAsset("/clients/clarks-amer.png") },
+  { name: "NHAI", logo: publicAsset("/clients/nhai.png") },
+  { name: "Kshetrapal Hospital Ajmer", logo: publicAsset("/clients/kshetrapal.png") },
+  { name: "Mewar Estate Ajmer", logo: publicAsset("/clients/mewar-estate.png") },
+  { name: "JLN Hospital Ajmer", logo: publicAsset("/clients/jln.png") },
+  { name: "MPS School Ajmer", logo: publicAsset("/clients/mps.png") },
+  { name: "DWPS Ajmer", logo: publicAsset("/clients/dwps.png") },
+  { name: "Mayo College Ajmer", logo: publicAsset("/clients/mayo.png") },
+  { name: "Taj Pratap Mahal Ajmer", logo: publicAsset("/clients/taj.png") },
+  { name: "JSB Kishangarh", logo: publicAsset("/clients/jsb.png") },
+  { name: "AKV Kishangarh", logo: publicAsset("/clients/akv.png") },
+  { name: "Bhutra Marble Kishangarh", logo: publicAsset("/clients/bhutra.png") },
+  { name: "CBSE Ajmer", logo: publicAsset("/clients/cbse.png") },
+  { name: "RBSE Ajmer", logo: publicAsset("/clients/rbse.png") },
+  { name: "Income Tax Department Ajmer", logo: publicAsset("/clients/income-tax.png") },
+  { name: "Army Cantt", logo: publicAsset("/clients/army-cantt.png") },
+  { name: "Ramada Ajmer", logo: publicAsset("/clients/ramada.png") },
+  { name: "Satguru Group Ajmer", logo: publicAsset("/clients/satguru.png") },
+  { name: "Marriott", logo: publicAsset("/clients/marriott.png") },
 ];
 
 const projects = [
@@ -793,12 +796,12 @@ function ConsultationModal() {
       if (file) {
         const fd = new FormData();
         fd.append("file", file);
-        const up = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/consultations/upload`, { method: "POST", body: fd });
+        const up = await fetch(`${apiBaseUrl}/api/consultations/upload`, { method: "POST", body: fd });
         if (!up.ok) throw new Error("We couldn't upload that file. Try a smaller image or remove it.");
         const upData = await up.json();
         fileId = upData.id; fileName = upData.filename;
       }
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/consultations`, {
+      const response = await fetch(`${apiBaseUrl}/api/consultations`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(),
@@ -877,7 +880,7 @@ function ContactModal() {
     event.preventDefault();
     setStatus({ state: "sending", error: "" });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/inquiries`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), company: form.company.trim() || null, agency: form.segment || null, budget: form.budget || null, message: form.message.trim() }) });
+      const response = await fetch(`${apiBaseUrl}/api/inquiries`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), company: form.company.trim() || null, agency: form.segment || null, budget: form.budget || null, message: form.message.trim() }) });
       if (!response.ok) {
         const detail = await response.json().catch(() => ({}));
         throw new Error(detail?.detail?.[0]?.msg || "Please double-check your details and try again.");
@@ -1149,7 +1152,7 @@ function BookingModal({ stay, onClose }) {
     if (open) {
       setStatus({ state: "idle", error: "" });
       setForm({ name: "", email: "", checkIn: "", checkOut: "", guests: "2", message: "" });
-      fetch(`${process.env.REACT_APP_BACKEND_URL}/api/stays/availability?stay=${encodeURIComponent(stay.name)}`)
+      fetch(`${apiBaseUrl}/api/stays/availability?stay=${encodeURIComponent(stay.name)}`)
         .then((res) => (res.ok ? res.json() : { booked: [], requested: [] }))
         .then((data) => { setBooked(data.booked || []); setPending(data.requested || []); })
         .catch(() => { setBooked([]); setPending([]); });
@@ -1180,7 +1183,7 @@ function BookingModal({ stay, onClose }) {
     }
     setStatus({ state: "sending", error: "" });
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/bookings`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stay: stay.name, name: form.name.trim(), email: form.email.trim(), check_in: form.checkIn, check_out: form.checkOut, guests: Number(form.guests), message: form.message.trim() || null }) });
+      const response = await fetch(`${apiBaseUrl}/api/bookings`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ stay: stay.name, name: form.name.trim(), email: form.email.trim(), check_in: form.checkIn, check_out: form.checkOut, guests: Number(form.guests), message: form.message.trim() || null }) });
       if (!response.ok) {
         const detail = await response.json().catch(() => ({}));
         const message = typeof detail?.detail === "string" ? detail.detail : detail?.detail?.[0]?.msg;

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/wp-content/plugins/bds-marvel/build/static/css/main.26776d55.css",
+    "main.js": "/wp-content/plugins/bds-marvel/build/static/js/main.5de51a52.js",
+    "index.html": "/wp-content/plugins/bds-marvel/build/index.html",
+    "main.26776d55.css.map": "/wp-content/plugins/bds-marvel/build/static/css/main.26776d55.css.map",
+    "main.5de51a52.js.map": "/wp-content/plugins/bds-marvel/build/static/js/main.5de51a52.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.26776d55.css",
+    "static/js/main.5de51a52.js"
+  ]
+}

@@ -13,7 +13,8 @@ const queryClient = new QueryClient({
   },
 });
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const mountNode = document.getElementById("bdsm-marvel-root") || document.getElementById("root");
+const root = ReactDOM.createRoot(mountNode);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

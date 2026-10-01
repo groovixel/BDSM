@@ -1481,33 +1481,10 @@ function AboutPage() {
   </main>;
 }
 
-function Preloader() {
-  return <div className="preloader" aria-hidden="true" data-testid="preloader">
-    <div className="preloader__brand">
-      <span className="preloader__word">BDSM</span>
-      <span className="preloader__line" />
-      <span className="preloader__sub">BDS MARVEL · MATERIALS — STRUCTURES — INTERIORS</span>
-    </div>
-  </div>;
-}
-
 function App() {
-  const [firstLoad] = useState(() => {
-    try {
-      if (sessionStorage.getItem("bdsm-visited")) return false;
-      sessionStorage.setItem("bdsm-visited", "1");
-      return true;
-    } catch {
-      return false;
-    }
-  });
-  useEffect(() => {
-    if (firstLoad) document.documentElement.classList.add("first-load");
-  }, [firstLoad]);
   return <BrowserRouter>
     <ContactProvider>
       <ConsultationProvider>
-      {firstLoad && <Preloader />}
       <PageShell>
         <Routes>
           <Route path="/" element={<Home />} />

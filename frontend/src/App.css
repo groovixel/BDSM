@@ -794,19 +794,7 @@ html.lenis,html.lenis body{height:auto}
   .menu-icon span{transition:none}
 }
 
-/* Signature preloader curtain: wordmark rise, acid line sweep, then the panel lifts (first visit per session). */
-.preloader{position:fixed;inset:0;z-index:100;background:#0a0a0a;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:preloader-lift .95s cubic-bezier(.76,0,.24,1) 1.35s both}
-.preloader__brand{display:flex;flex-direction:column;align-items:center;gap:20px;color:var(--paper)}
-.preloader__word{font-size:clamp(54px,9vw,120px);font-weight:800;letter-spacing:-.05em;line-height:1;animation:preloader-word .8s cubic-bezier(.22,1,.36,1) .12s both}
-.preloader__line{width:0;height:1px;background:var(--acid);animation:preloader-line .8s cubic-bezier(.22,1,.36,1) .4s both}
-.preloader__sub{font:10px var(--mono);letter-spacing:.18em;color:#ffffff80;animation:preloader-fade .7s ease .5s both}
-@keyframes preloader-word{from{transform:translateY(55%);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes preloader-fade{from{opacity:0}to{opacity:1}}
-@keyframes preloader-line{from{width:0}to{width:120px}}
-@keyframes preloader-lift{to{transform:translateY(-101%);visibility:hidden}}
 @media(prefers-reduced-motion:reduce){
-  .preloader{animation-duration:.01s;animation-delay:.15s}
-  .preloader__word,.preloader__line,.preloader__sub{animation-duration:.01s;animation-delay:0s}
   .work-slideshow__frame img,.work-slideshow__meta,.work-slideshow__info h3{animation:none}
 }
 
@@ -847,14 +835,6 @@ html.lenis,html.lenis body{height:auto}
 @media(max-width:800px){
   .client-logo{width:125px;height:68px;padding:8px 11px}
 }
-
-/* First visit: hold the hero entrance until the curtain has lifted. */
-.first-load .hero .eyebrow{animation-delay:1.3s}
-.first-load .hero h1 .hero-line:nth-child(1) .hero-line__inner{animation-delay:1.45s}
-.first-load .hero h1 .hero-line:nth-child(2) .hero-line__inner{animation-delay:1.58s}
-.first-load .hero h1 .hero-line:nth-child(3) .hero-line__inner{animation-delay:1.71s}
-.first-load .hero-footer{animation-delay:2.05s}
-.first-load .hero-rings-parallax{animation-delay:1.9s}
 
 /* Hero parallax wrappers: scroll drift handled by framer-motion, mouse tilt by CSS vars. */
 @keyframes hero-fade{from{opacity:0}to{opacity:1}}

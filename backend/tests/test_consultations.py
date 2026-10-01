@@ -4,7 +4,7 @@ import os
 import pytest
 import requests
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL") or "https://bds-editorial-import.preview.emergentagent.com"
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL") or "https://github-import-161.preview.emergentagent.com"
 BASE_URL = BASE_URL.rstrip("/")
 API = f"{BASE_URL}/api"
 

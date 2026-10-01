@@ -24,6 +24,20 @@ studio with projects showcase, an Air BnB "stays" booking section, and a contact
   confirmed dates block overlapping dates (no double-booking).
 - Contact form stores inquiries and dispatches owner notification email.
 
+## Implemented (2026-10-01) — Real DrawStones catalogue (from owner PDFs)
+- Replaced placeholder catalogue with the real DrawStones product range (18 items):
+  Centre & End Tables, Marble Inlay Table Tops, Marble & Stone Fireplace, Marble Home
+  Temple, Stone Basins & Bathtubs, Deity & Figure Statues, Spheres & Abstract Sculpture,
+  Fountains & Water Features, Garden Benches & Seating, Planters & Urns, Stone Lanterns,
+  Jali Screens & Railings, Jharokhas & Windows, Pillars & Columns, Temple Carving,
+  Gazebos & Chhatris, Marble Flooring/Inlay/Mosaic, Monuments & Projects.
+- All items branded DrawStones (owner corrected: the "Adinath Marbles" PDF was also
+  DrawStones — all labels renamed). Brand shown on catalogue cards + detail-page eyebrow.
+- Marble & Stone service page catalogue = the 5 signature DrawStones ranges, linked to
+  the same /catalogue/:slug detail pages (single source of truth).
+- New relevant images per category; new filter pills (Marble/Sandstone/Stone; product
+  groups; Interior/Living/Bathroom/Garden/Architectural). Site tone/colours unchanged.
+
 ## Implemented (2026-09-25, pass 2) — Catalogue detail + mobile EXPLORE fix
 - Bug fix (user-reported): EXPLORE button was hidden on mobile (≤800px) for all six
   business-network panels — removed the `display:none` rule; EXPLORE now shows and opens

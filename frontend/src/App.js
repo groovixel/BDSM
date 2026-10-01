@@ -966,6 +966,12 @@ function SegmentPage() {
   const extra = serviceExtras[segment.slug];
   const { openConsult } = useConsultation();
   usePageMeta(...(SEGMENT_SEO[segment.slug] || SEGMENT_SEO["marble-and-stone"]));
+  // BDS Marvel (interior-designing) shows Selected Projects before Consulting; all other brand pages keep Consulting first.
+  const projectsFirst = segment.slug === "interior-designing";
+  const workSection = <section className="detail-work">
+    <div className="detail-intro"><span className="section-index">{projectsFirst ? "01" : extra?.catalogue ? "03" : "02"} — SELECTED PROJECTS</span><h2>Work in the<br /><em>material.</em></h2></div>
+    <div className="mini-work-grid">{(related.length ? related : projects.slice(0, 2)).map((work) => <Link to={`/projects/${work.slug}`} className="mini-work" key={work.title} data-testid={`agency-work-${work.slug}`}><img src={img(work.image, 1200)} alt="" /><div><div className="mini-work__text"><span>{work.category} · {work.year}</span><h3>{work.title}</h3></div><ArrowUpRight size={18} /></div></Link>)}</div>
+  </section>;
   return <main className={`detail-page detail-page--${segment.tone}`} data-testid="agency-detail-page">
     <section className="detail-hero" style={{ backgroundImage: `linear-gradient(160deg, rgba(10,8,6,.78), rgba(10,8,6,.42)), url(${img(segment.hero)})` }}>
       <div className="detail-kicker"><span>{segment.parent.toUpperCase()} · {String(segments.indexOf(segment) + 1).padStart(2, "0")} / {String(segments.length).padStart(2, "0")}</span><Link to="/" data-testid="agency-detail-back-link">BACK TO NETWORK</Link></div>
@@ -985,9 +991,10 @@ function SegmentPage() {
         <div className="svc-cat-card__body"><span className="svc-cat-card__meta">{item.meta}</span><h3>{item.name}</h3><p>{item.desc}</p></div>
       </Link>)}</div>
     </section>}
+    {projectsFirst && workSection}
     {extra && <section className="svc-consult" data-testid="service-consulting">
       <div className="svc-consult__inner">
-        <span className="section-index">{extra.catalogue ? "02" : "01"} — CONSULTING</span>
+        <span className="section-index">{projectsFirst ? "02" : extra.catalogue ? "02" : "01"} — CONSULTING</span>
         <h2>Get expert<br /><em>guidance.</em></h2>
         <p className="svc-consult__line">{extra.consultLine}</p>
         <ul className="svc-consult__cover">{extra.consultCover.map((c) => <li key={c}>{c}</li>)}</ul>
@@ -997,10 +1004,7 @@ function SegmentPage() {
         </div>
       </div>
     </section>}
-    <section className="detail-work">
-      <div className="detail-intro"><span className="section-index">{extra?.catalogue ? "03" : "02"} — SELECTED PROJECTS</span><h2>Work in the<br /><em>material.</em></h2></div>
-      <div className="mini-work-grid">{(related.length ? related : projects.slice(0, 2)).map((work) => <Link to={`/projects/${work.slug}`} className="mini-work" key={work.title} data-testid={`agency-work-${work.slug}`}><img src={img(work.image, 1200)} alt="" /><div><div className="mini-work__text"><span>{work.category} · {work.year}</span><h3>{work.title}</h3></div><ArrowUpRight size={18} /></div></Link>)}</div>
-    </section>
+    {!projectsFirst && workSection}
   </main>;
 }
 

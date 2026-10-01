@@ -1309,7 +1309,7 @@ function StaysCategoryPage() {
   return <main className="stays-page" data-testid="stays-category-page">
     <section className="stays-hero">
       <div className="detail-kicker"><span>BDSM · STAYS</span><Link to="/stays" data-testid="stays-category-back-link">ALL CATEGORIES</Link></div>
-      <div className="stays-hero__copy"><p className="eyebrow">{tierStays.length} STAYS</p><h1>{meta.headline.replace(/\.$/, "")}<br /><em>Pick your stay.</em></h1><p>{meta.copy}</p></div>
+      <div className="stays-hero__copy"><p className="eyebrow">{tierStays.length} STAYS</p><h1>{meta.headline.replace(/\.$/, "")}<br /><em>Pick your stay.</em></h1></div>
     </section>
     <section className="stays-list" data-testid="stays-list">
       {tierStays.map((stay, index) => <StayCard key={stay.slug} stay={stay} index={index} onBook={setBooking} />)}

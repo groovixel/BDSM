@@ -221,13 +221,15 @@ const serviceExtras = {
     consultService: "Marble & Stone Consulting",
     consultLine: "Guidance on material selection, finishes, applications, combinations and suitability for your project.",
     consultCover: ["Material selection", "Finishes", "Applications", "Combinations", "Project suitability"],
-    catalogue: [
-      { slug: "center-end-tables", brand: "DrawStones", name: "Centre & End Tables", image: "photo-1692262089751-7e26b69ad8d1", desc: "Marble centre and end tables in black and white marble.", meta: "DrawStones · Tables" },
-      { slug: "marble-inlay-tops", brand: "DrawStones", name: "Marble Inlay Table Tops", image: "photo-1506463108611-88834e9f6169", desc: "Pietra dura inlay tops, fully customisable.", meta: "DrawStones · Inlay" },
-      { slug: "marble-stone-fireplace", brand: "DrawStones", name: "Marble & Stone Fireplace", image: "photo-1603039531759-1a1bbe4f9f94", desc: "Statement fireplaces in marble and stone.", meta: "DrawStones · Fireplace" },
-      { slug: "marble-home-temple", brand: "DrawStones", name: "Marble Home Temple", image: "photo-1678593628844-6ea49dee8ce3", desc: "Carved temples in Vietnam white marble.", meta: "DrawStones · Temple" },
-      { slug: "stone-basins-bathtubs", brand: "DrawStones", name: "Stone Basins & Bathtubs", image: "photo-1576698483491-8c43f0862543", desc: "Basins and bathtubs carved from solid block.", meta: "DrawStones · Bath" },
-    ],
+    // Full DrawStones range — derived from the main catalogue so both pages stay in sync.
+    catalogue: catalogueItems.filter((item) => item.brand === "DrawStones").map((item) => ({
+      slug: item.slug,
+      brand: item.brand,
+      name: item.name,
+      image: item.image,
+      desc: (catalogueDetails[item.slug]?.desc || "").split(" — ")[0] || item.origin,
+      meta: `${item.brand} · ${item.product}`,
+    })),
   },
   flooring: {
     consultService: "Flooring Consulting",

@@ -1031,6 +1031,11 @@ html.lenis,html.lenis body{height:auto}
 .cat-spec-list li{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:20px 0;border-top:1px solid #0a0a0a22;font-size:17px}
 .cat-spec-list li span{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#0a0a0a80;padding-top:5px}
 .cat-detail-cta__actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+/* Dark variant of the CTA band — deep charcoal from the Selected Projects sections, so the gold italic pops against the cream catalogue page. */
+.detail-cta--dark{background:#161b1a;color:var(--paper)}
+.detail-cta--dark .section-index{color:#ffffff80}
+.detail-cta--dark .cat-detail-cta__consult{border-color:#f4efe655;color:var(--paper)}
+.detail-cta--dark .cat-detail-cta__consult:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .cat-detail-cta__consult{background:transparent;border-color:#0a0a0a88;color:var(--ink)}
 .cat-detail-cta__consult:hover{background:var(--ink);color:var(--paper)}
 .catalogue-card__link{display:flex;flex-direction:column;gap:16px;color:inherit;text-decoration:none}

@@ -1123,7 +1123,7 @@ function CatalogueItemPage() {
       <div className="detail-intro"><span className="section-index">02 — SPECIFICATION</span><h2>Made to<br /><em>spec.</em></h2></div>
       <ul className="cat-spec-list" data-testid="detail-spec-list">{detail.specs.map(([label, value]) => <li key={label}><span>{label}</span>{value}</li>)}</ul>
     </section>
-    <section className="detail-cta">
+    <section className="detail-cta detail-cta--dark">
       <span className="section-index">READY WHEN YOU ARE</span>
       <h2>See it in<br /><em>your project.</em></h2>
       <div className="cat-detail-cta__actions">

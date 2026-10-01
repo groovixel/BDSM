@@ -222,12 +222,12 @@
 ## metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 3
+  test_sequence: 4
   run_ui: true
 
 ## test_plan:
   current_focus:
-    - "About page full styling + CTA button visibility fix"
+    - "Project card layout fix on brand/segment pages (SELECTED PROJECTS section)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -252,6 +252,10 @@
     -message: "New round: (1) ABOUT PAGE WAS COMPLETELY UNSTYLED (0 about-* rules in App.css) — wrote the full stylesheet matching the design system: dark hero w/ radial glow + brass-italic h1 + offset lede, 4-col stats strip w/ hairline dividers, principles hairline card grid (3->1 col), timeline hairline rows w/ acid italic years, team 3-col 4:5 image grid w/ hover zoom, CTA section, full mobile breakpoints. Self-verified desktop + mobile 390x844 (zero horizontal overflow). (2) Fixed invisible CTA buttons: .np-btn--paper was defined BEFORE .np-btn base so equal specificity let the base override it (transparent bg + dark text on dark bg) — added .np-btn.np-btn--paper override; fixed on About AND Experience pages (both now paper bg rgb(244,239,230)). (3) Added 900ms post-mount reveal re-check in NetworkExperience (panel-1 initial-load edge case from testing agent). Needs testing agent confirmation for about page + CTA buttons."
     -agent: "testing"
     -message: "✅✅✅ ALL TESTS PASS - ABOUT PAGE FULLY STYLED & CTA BUTTON FIX VERIFIED! Comprehensive testing at desktop 1920x1080 + mobile 390x844 confirms: (1) ABOUT PAGE: Hero section perfect (dark bg with radial gradient, 124px headline with brass/italic second line, kicker row correct, offset lede with 2 paragraphs at 17px font size). Stats strip: all 4 stats (20+, 04, 05, 200+) with hairline left dividers. Principles: 6 cards (data-testid principle-01..06) in 3-col grid with hairline borders, all found. Timeline: 7 items (data-testid timeline-2003..2024) with brass italic years rgb(201,162,98) and hairline separators. Team: 6 cards (data-testid team-1..6) with 4:5 aspect ratio images loading correctly, acid role labels. (2) ✅✅✅ CRITICAL CTA BUTTON FIX VERIFIED: About page button (data-testid about-cta-button) has correct background rgb(244,239,230), is visible, opens contact modal. Experience page button (data-testid experience-book-cta) has correct background rgb(244,239,230), visible over hero image. CSS specificity fix (.np-btn.np-btn--paper override) working perfectly on both pages. (3) MOBILE 390x844: Zero horizontal overflow (body width=390px), all sections stack correctly (stats 2-col, principles 1-col, team 1-col), text readable (H1 52px, lede 17px). (4) REGRESSION CHECKS PASS: All 5 homepage network panels reveal tagline/tags/buttons correctly (h3 opacity=1, both buttons visible opacity=1), Lenis smooth scroll active (html.lenis=true), purpose tabs rotate colors correctly (tab 2=bronze rgb(201,168,136), tab 4=terracotta rgb(217,164,138)), header menu shows '06 AIR BNB', footer shows 'air bnb', both navigate to /experience. User's reported issue (invisible CTA buttons on dark backgrounds) COMPLETELY RESOLVED. Ready for user acceptance."
+    -agent: "main"
+    -message: "PROJECT CARD LAYOUT BUG FIX: User reported project names not in correct position on brand/segment pages (/businesses/flooring, /businesses/marble-and-stone) in 'SELECTED PROJECTS' section. Root cause: .mini-work grid had 3 children (category span, h3, arrow) but only 2 columns (1fr text | 24px arrow), squeezing h3 into 24px column. FIX: wrapped category span + h3 in .mini-work__text div creating correct 2-child grid structure. Self-verified code at App.js line 1002. NEEDS TESTING AGENT VERIFICATION: visit both /businesses/flooring and /businesses/marble-and-stone, scroll to 'SELECTED PROJECTS' section, verify for EVERY project card via JS measurements: (1) h3 width is several hundred px NOT ~24px, (2) h3 sits directly below image (within ~60px), (3) h3 aligned to LEFT edge of card, (4) arrow icon at RIGHT side of meta row. Also regression check: catalogue section still renders."
+    -agent: "testing"
+    -message: "✅✅✅ PROJECT CARD LAYOUT FIX VERIFIED - COMPLETE SUCCESS! Tested both pages at desktop 1920x1080 with comprehensive JS measurements. FLOORING PAGE (/businesses/flooring): Found 1 project card 'Annex Workspace' - ✓ H3 width 771.6px (properly sized, NOT squeezed into 24px), ✓ H3 is 52px below image (within 60px threshold), ✓ H3 left edge perfectly aligned with card left edge (0px difference), ✓ Arrow at right side (6px from right edge), ✓ Catalogue section renders with 15 cards. MARBLE AND STONE PAGE (/businesses/marble-and-stone): Found 3 project cards ('Meridian Residences', 'Atrium Mall', 'Civic Facade') - ALL 3 CARDS PASS ALL CHECKS: ✓ H3 width 771.6px for all cards, ✓ H3 is 52px below image for all cards, ✓ H3 left edge perfectly aligned (0px difference), ✓ Arrow at right side (6px from right edge), ✓ Catalogue section renders with 18 cards, ✓ No console errors. Screenshots confirm project titles now properly positioned on left side of cards spanning full text column width with arrow icons correctly positioned on right. The .mini-work__text wrapper fix successfully resolved the grid layout issue where titles were being squeezed into the 24px arrow column. User's reported bug COMPLETELY RESOLVED. Ready for user acceptance."
 
 ## agent_communication (Case Study Pages round):
     -agent: "main"
@@ -272,3 +276,21 @@
 ## agent_communication (Mobile network-section sticky-scroll round):
     -agent: "main"
     -message: "USER BUG: network panels section (data-testid='network-section', App.js ~line 397) on mobile view LAGS and panels STICK/snap while scrolling; user wants mobile to scroll normally (no sticky card behaviour) while desktop keeps it. FIX: lib/smoothScroll.js initSmoothScroll now returns {lenis:null,snap:null} when matchMedia('(max-width: 900px)') matches (same breakpoint as the mobile panel CSS at App.css:309) — so on mobile there is NO Lenis smooth-scroll loop and NO lenis/snap panel snapping; scrolling is fully native. smoothScrollTo falls back to window.scrollTo/scrollIntoView (footer 'To the Top' still works). NetworkExperience's snap registration already no-ops when snap is null; reveal logic is scroll-event driven (rAF-throttled) and works with native scroll. Desktop (>900px) unchanged. PLEASE VERIFY: MOBILE 390x844 — scrolling through the network panels feels like a normal page (no snapping/pinning to panel tops, no Lenis glide), window.__smoothScroll should be undefined and html should NOT have the 'lenis' class; panel copy reveal still plays (h3 + EXPLORE/GET IN TOUCH reach opacity 1); footer-scroll-top still returns to top. DESKTOP 1920x800 REGRESSION — html.lenis present, panels still snap to start on wheel scroll, reveals play, footer-scroll-top reaches top."
+
+  - task: "Project card layout fix on brand/segment pages (SELECTED PROJECTS section)"
+    implemented: true
+    working: true
+    file: "frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        -working: false
+        -agent: "user"
+        -comment: "USER REPORTED: On brand/segment pages (/businesses/flooring, /businesses/marble-and-stone), in the 'SELECTED PROJECTS' section ('Work in the material.'), project names were not in the correct position. Root cause: each project card (.mini-work) has a grid meta row under the image with 2 columns (1fr text | 24px arrow), but the JSX had 3 children (category span, title h3, arrow icon), so the project title was squeezed into the 24px-wide right column and the arrow dropped to the bottom-left."
+        -working: true
+        -agent: "main"
+        -comment: "FIX APPLIED: wrapped the category span + title h3 in a .mini-work__text div so the grid has exactly 2 children (text block left, arrow right). The grid structure is now: .mini-work > div (grid: 1fr 24px) contains .mini-work__text (category + h3) and ArrowUpRight icon. Self-verified code structure in App.js line 1002. NEEDS TESTING AGENT VERIFICATION on both /businesses/flooring and /businesses/marble-and-stone pages."
+        -working: true
+        -agent: "testing"
+        -comment: "✅✅✅ PROJECT CARD LAYOUT FIX VERIFIED - COMPLETE SUCCESS! Tested both pages at desktop 1920x1080. FLOORING PAGE: 1 project card 'Annex Workspace' - H3 width 771.6px (properly sized, NOT squeezed into 24px), H3 is 52px below image (within 60px threshold), H3 left edge perfectly aligned with card left edge (0px difference), arrow at right side (6px from right edge). MARBLE AND STONE PAGE: 3 project cards ('Meridian Residences', 'Atrium Mall', 'Civic Facade') - ALL 3 CARDS PASS ALL CHECKS: H3 width 771.6px for all cards, H3 is 52px below image, H3 left edge perfectly aligned (0px difference), arrow at right side (6px from right edge). REGRESSION CHECKS PASS: Flooring page catalogue section renders with 15 cards, Marble page catalogue section renders with 18 cards, no console errors. Screenshots confirm project titles now properly positioned on left side spanning full text column width with arrow icons correctly on right. The .mini-work__text wrapper fix successfully resolved the grid layout issue. User's reported bug COMPLETELY RESOLVED."

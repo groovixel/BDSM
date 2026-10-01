@@ -999,7 +999,7 @@ function SegmentPage() {
     </section>}
     <section className="detail-work">
       <div className="detail-intro"><span className="section-index">{extra?.catalogue ? "03" : "02"} — SELECTED PROJECTS</span><h2>Work in the<br /><em>material.</em></h2></div>
-      <div className="mini-work-grid">{(related.length ? related : projects.slice(0, 2)).map((work) => <Link to={`/projects/${work.slug}`} className="mini-work" key={work.title} data-testid={`agency-work-${work.slug}`}><img src={img(work.image, 1200)} alt="" /><div><span>{work.category} · {work.year}</span><h3>{work.title}</h3><ArrowUpRight size={18} /></div></Link>)}</div>
+      <div className="mini-work-grid">{(related.length ? related : projects.slice(0, 2)).map((work) => <Link to={`/projects/${work.slug}`} className="mini-work" key={work.title} data-testid={`agency-work-${work.slug}`}><img src={img(work.image, 1200)} alt="" /><div><div className="mini-work__text"><span>{work.category} · {work.year}</span><h3>{work.title}</h3></div><ArrowUpRight size={18} /></div></Link>)}</div>
     </section>
     <section className="detail-cta"><span className="section-index">READY WHEN YOU ARE</span><h2>Let's build<br /><em>something together.</em></h2><ContactTrigger className="contact-cta-btn" testId="agency-detail-contact-link">START A PROJECT</ContactTrigger></section>
   </main>;

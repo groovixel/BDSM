@@ -978,15 +978,8 @@ function SegmentPage() {
         </div>
       </div>
     </section>
-    <section className="detail-content">
-      <div className="detail-intro"><span className="section-index">01 — POINT OF VIEW</span><h2>{segment.tagline}</h2></div>
-      <div className="detail-columns">
-        <div><span className="section-index">CAPABILITIES</span><ul className="service-list">{segment.services.map((service, index) => <li key={service} onClick={() => openConsult(extra?.consultService || "")} data-testid={`capability-item-${index + 1}`}><span>0{index + 1}</span>{service}<ArrowUpRight size={15} /></li>)}</ul></div>
-        <div><span className="section-index">THE TEAM</span><ul className="team-list">{segment.team.map((person) => <li key={person}>{person}</li>)}</ul></div>
-      </div>
-    </section>
     {extra?.catalogue && <section className="svc-catalogue" data-testid="service-catalogue">
-      <div className="detail-intro"><span className="section-index">02 — CATALOGUE</span><h2>Browse the<br /><em>{segment.name.toLowerCase()}.</em></h2></div>
+      <div className="detail-intro"><span className="section-index">01 — CATALOGUE</span><h2>Browse the<br /><em>{segment.name.toLowerCase()}.</em></h2></div>
       <div className="svc-catalogue__grid">{extra.catalogue.map((item, index) => <Link className="svc-cat-card" to={`/catalogue/${item.slug}`} key={item.name} data-testid={`catalogue-card-${index + 1}`}>
         <div className="svc-cat-card__media"><img src={img(item.image, 900)} alt={item.name} loading="lazy" /></div>
         <div className="svc-cat-card__body"><span className="svc-cat-card__meta">{item.meta}</span><h3>{item.name}</h3><p>{item.desc}</p></div>
@@ -994,7 +987,7 @@ function SegmentPage() {
     </section>}
     {extra && <section className="svc-consult" data-testid="service-consulting">
       <div className="svc-consult__inner">
-        <span className="section-index">{extra.catalogue ? "03" : "02"} — CONSULTING</span>
+        <span className="section-index">{extra.catalogue ? "02" : "01"} — CONSULTING</span>
         <h2>Get expert<br /><em>guidance.</em></h2>
         <p className="svc-consult__line">{extra.consultLine}</p>
         <ul className="svc-consult__cover">{extra.consultCover.map((c) => <li key={c}>{c}</li>)}</ul>
@@ -1005,7 +998,7 @@ function SegmentPage() {
       </div>
     </section>}
     <section className="detail-work">
-      <div className="detail-intro"><span className="section-index">{extra?.catalogue ? "04" : "03"} — SELECTED PROJECTS</span><h2>Work in the<br /><em>material.</em></h2></div>
+      <div className="detail-intro"><span className="section-index">{extra?.catalogue ? "03" : "02"} — SELECTED PROJECTS</span><h2>Work in the<br /><em>material.</em></h2></div>
       <div className="mini-work-grid">{(related.length ? related : projects.slice(0, 2)).map((work) => <Link to={`/projects/${work.slug}`} className="mini-work" key={work.title} data-testid={`agency-work-${work.slug}`}><img src={img(work.image, 1200)} alt="" /><div><span>{work.category} · {work.year}</span><h3>{work.title}</h3><ArrowUpRight size={18} /></div></Link>)}</div>
     </section>
     <section className="detail-cta"><span className="section-index">READY WHEN YOU ARE</span><h2>Let's build<br /><em>something together.</em></h2><ContactTrigger className="contact-cta-btn" testId="agency-detail-contact-link">START A PROJECT</ContactTrigger></section>

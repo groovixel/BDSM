@@ -997,7 +997,7 @@ function ProjectsArchive() {
   const filterOptions = ["All work", ...segments.map((s) => s.name)];
   const filtered = useMemo(() => projects.filter((item) => (filter === "All work" || item.segment === filter) && `${item.title} ${item.category} ${item.segment} ${item.location}`.toLowerCase().includes(query.toLowerCase())), [filter, query]);
   return <main className="work-page" data-testid="work-archive-page">
-    <section className="work-hero"><div className="detail-kicker"><span>BDSM · PROJECTS {new Date().getFullYear()}</span><Link to="/" data-testid="work-back-home-link">BACK HOME</Link></div><p className="eyebrow">THE WORK</p><h1>Projects across<br /><em>materials & scale.</em></h1><p className="work-hero-copy">Selected work by BDSM · BDS Marvel — residential, hospitality, commercial and civic projects in stone, flooring, construction and interiors, all delivered by one in-house team.</p></section>
+    <section className="work-hero"><div className="detail-kicker"><span>BDSM · PROJECTS {new Date().getFullYear()}</span><Link to="/" data-testid="work-back-home-link">BACK HOME</Link></div><p className="eyebrow">THE WORK</p><h1>Projects across<br /><em>materials & scale.</em></h1></section>
     <section className="work-library">
       <div className="work-controls">
         <label className="search-box"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" aria-label="Search projects" data-testid="work-search-input" /></label>

@@ -1150,7 +1150,6 @@ function ExperiencePage() {
             <div className="stay-tier-card__media"><img src={img(first.hero, 900)} alt={`${tier.name} stays`} loading="lazy" /></div>
             <div className="stay-tier-card__body">
               <h3>{tier.headline}</h3>
-              <p>{tier.copy}</p>
               <span className="stay-tier-card__meta">{stays.filter((stay) => stay.tier === tier.name).length} stays · from {stays.filter((stay) => stay.tier === tier.name).map((stay) => stay.price).sort()[0]}/night</span>
               <span className="stay-tier-card__cta">EXPLORE &amp; BOOK <ArrowUpRight size={15} /></span>
             </div>
